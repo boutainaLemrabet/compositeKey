@@ -1,0 +1,28 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="employee">
+            <h2 data-cy="employeeDetailsHeading"><span jhiTranslate="compositekeyApp.employee.detail.title">Employee</span> {{ employee.id }}</h2>
+
+            <hr>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="compositekeyApp.employee.username">Username</span></dt>
+                <dd>
+                    <span>{{ employee.username }}</span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employee.fullname">Fullname</span></dt>
+                <dd>
+                    <span>{{ employee.fullname }}</span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employee.manager">Manager</span></dt>
+                <dd>
+                    <div *ngIf="employee.manager">
+                        <a [routerLink]="['/employee', employee!.manager!.username!, 'view']">{{ employee!.manager!.fullname }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button pButton type="submit" (click)="previousState()" class="ui-button-info" icon="pi pi-arrow-left" [label]="'entity.action.back' | translate" data-cy="entityDetailsBackButton"></button>
+            <button pButton type="button" icon="pi pi-pencil" [label]="'entity.action.edit' | translate" [routerLink]="['/employee', employee!.username, 'edit']"></button>
+        </div>
+    </div>
+</div>

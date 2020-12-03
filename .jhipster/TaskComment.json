@@ -1,0 +1,30 @@
+{
+  "name": "TaskComment",
+  "fields": [
+    {
+      "fieldName": "value",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "task",
+      "otherEntityRelationshipName": "taskComment",
+      "relationshipValidateRules": "required",
+      "relationshipName": "task",
+      "otherEntityField": "name"
+    }
+  ],
+  "entityTableName": "task_comment",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["compositekey"],
+  "changelogDate": "20201203152828"
+}

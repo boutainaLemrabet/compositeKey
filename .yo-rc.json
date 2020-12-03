@@ -1,0 +1,66 @@
+{
+  "generator-jhipster": {
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "clientFramework": "angularX",
+    "serverPort": "8080",
+    "serviceDiscoveryType": false,
+    "skipUserManagement": false,
+    "withAdminUi": true,
+    "baseName": "compositekey",
+    "buildTool": "gradle",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": false,
+    "enableTranslation": true,
+    "jhiPrefix": "jhi",
+    "languages": ["en"],
+    "messageBroker": false,
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "skipClient": false,
+    "testFrameworks": ["protractor"],
+    "websocket": false,
+    "applicationType": "monolith",
+    "jhipsterVersion": "6.10.5",
+    "skipServer": false,
+    "packageFolder": "com/mycompany/myapp",
+    "packageName": "com.mycompany.myapp",
+    "clientPackageManager": "npm",
+    "dtoSuffix": "DTO",
+    "entitySuffix": "",
+    "reactive": false,
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "entities": [
+      "Employee",
+      "EmployeeSkill",
+      "CertificateType",
+      "EmployeeSkillCertificate",
+      "Task",
+      "TaskComment",
+      "WithIdString",
+      "WithIdStringDetails"
+    ],
+    "skipCheckLengthOfIdentifier": false,
+    "skipFakeData": false,
+    "blueprints": [
+      {
+        "name": "generator-jhipster-primeng-blueprint",
+        "version": "6.8.3"
+      }
+    ],
+    "otherModules": [
+      {
+        "name": "generator-jhipster-primeng-blueprint",
+        "version": "6.8.3"
+      }
+    ],
+    "pages": [],
+    "nativeLanguage": "en",
+    "creationTimestamp": 1607008948278,
+    "jwtSecretKey": "YTk4NWFkYTVhYjljM2NlNGM0MGQ1NDkzNWM5ZTQ3ODNlMzk2NTNkNGJlM2M0ZmI4ZWQ4NGM1YzEyYTJlMTRjYTgxZTdmYjA5YzI4MTdjMjA1MGVhOGU4N2MyMzEyNDlmZThkMGUyMDY5MzJiOWY0NGUyNWZjZTUyMDhiYWMxZGQ=",
+    "lastLiquibaseTimestamp": 1607009428000
+  }
+}

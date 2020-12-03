@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="employeeSkill">
+            <h2 data-cy="employeeSkillDetailsHeading"><span jhiTranslate="compositekeyApp.employeeSkill.detail.title">Employee Skill</span> {{ employeeSkill.id }}</h2>
+
+            <hr>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="compositekeyApp.employeeSkill.name">Name</span></dt>
+                <dd>
+                    <span>{{ employeeSkill.name }}</span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employeeSkill.level">Level</span></dt>
+                <dd>
+                    <span>{{ employeeSkill.level }}</span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employeeSkill.task">Task</span></dt>
+                <dd>
+                    <span *ngFor="let task of employeeSkill.tasks; let last = last">
+                        <a [routerLink]="['/task', task!.id!, 'view']">{{ task!.name }}</a>{{ last ? '' : ', ' }}
+                    </span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employeeSkill.employee">Employee</span></dt>
+                <dd>
+                    <div *ngIf="employeeSkill.employee">
+                        <a [routerLink]="['/employee', employeeSkill!.employee!.username!, 'view']">{{ employeeSkill!.employee!.fullname }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employeeSkill.teacher">Teacher</span></dt>
+                <dd>
+                    <div *ngIf="employeeSkill.teacher">
+                        <a [routerLink]="['/employee', employeeSkill!.teacher!.username!, 'view']">{{ employeeSkill!.teacher!.fullname }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button pButton type="submit" (click)="previousState()" class="ui-button-info" icon="pi pi-arrow-left" [label]="'entity.action.back' | translate" data-cy="entityDetailsBackButton"></button>
+            <button pButton type="button" icon="pi pi-pencil" [label]="'entity.action.edit' | translate" [routerLink]="['/employee-skill', { name: employeeSkill!.name!, employeeUsername: employeeSkill!.employee!.username! }, 'edit']"></button>
+        </div>
+    </div>
+</div>

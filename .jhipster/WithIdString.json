@@ -1,0 +1,31 @@
+{
+  "name": "WithIdString",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"],
+      "id": true
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "withIdStringDetails",
+      "otherEntityRelationshipName": "withIdString",
+      "relationshipName": "withIdStringDetails",
+      "otherEntityField": "id",
+      "ownerSide": false
+    }
+  ],
+  "entityTableName": "with_id_string",
+  "dto": "mapstruct",
+  "pagination": "no",
+  "service": "serviceImpl",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["compositekey"],
+  "changelogDate": "20201203152928"
+}

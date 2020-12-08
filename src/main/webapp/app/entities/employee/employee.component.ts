@@ -1,25 +1,23 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { filter, tap, switchMap } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
 import { MessageService } from 'primeng/api';
-import { IEmployee } from 'app/shared/model/employee.model';
+import { IEmployee } from '../../shared/model/employee.model';
 import { EmployeeService } from './employee.service';
 
-import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
+import { ITEMS_PER_PAGE } from '../../core/config/pagination.constants';
 import {
   computeFilterMatchMode,
   lazyLoadEventToServerQueryParams,
   lazyLoadEventToRouterQueryParams,
   fillTableFromQueryParams,
-} from 'app/shared/util/request-util';
+} from '../../core/request/request-util';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
-import { I } from 'app/shared/model/.model';
-import { Service } from 'app/entities//.service';
+
 import { Table } from 'primeng/table';
 
 @Component({
@@ -29,13 +27,13 @@ import { Table } from 'primeng/table';
 export class EmployeeComponent implements OnInit, OnDestroy {
   employees?: IEmployee[];
   eventSubscriber?: Subscription;
-  Options: I[] | null = null;
+  managerOptions: IEmployee[] | null = null;
 
   totalItems?: number;
   itemsPerPage!: number;
   loading!: boolean;
 
-  private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: any) => string; unflatten?: (_: string) => any } } = {
+  private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
     managerUsername: { matchMode: 'in' },
   };
 
@@ -44,7 +42,6 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   constructor(
     protected employeeService: EmployeeService,
-    protected employeeService: Service,
     protected messageService: MessageService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
@@ -57,7 +54,6 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.registerChangeInEmployees();
     this.activatedRoute.queryParams
       .pipe(
         tap(queryParams => fillTableFromQueryParams(this.employeeTable, queryParams, this.filtersDetails)),
@@ -92,7 +88,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     this.employeeTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
   }
 
-  delete(username: undefined): void {
+  delete(username: string): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
       message: this.translateService.instant('primengtestApp.employee.delete.question', { id: username }),
@@ -107,8 +103,10 @@ export class EmployeeComponent implements OnInit, OnDestroy {
     });
   }
 
-  onLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService.query(lazyLoadEventToServerQueryParams(event, '.contains')).subscribe(res => (this.Options = res.body));
+  onManagerLazyLoadEvent(event: LazyLoadEvent): void {
+    this.employeeService
+      .query(lazyLoadEventToServerQueryParams(event, 'username.contains'))
+      .subscribe(res => (this.managerOptions = res.body));
   }
 
   trackId(index: number, item: IEmployee): string {

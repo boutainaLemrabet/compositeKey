@@ -4,7 +4,7 @@ import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 
-import { IEmployee } from 'app/shared/model/employee.model';
+import { IEmployee } from '../../shared/model/employee.model';
 import { EmployeeService } from './employee.service';
 
 @Injectable({ providedIn: 'root' })

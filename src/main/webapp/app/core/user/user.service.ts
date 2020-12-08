@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/core/request/request-util';
-import { Pagination } from 'app/core/request/request.model';
 import { IUser } from './user.model';
 
 @Injectable({ providedIn: 'root' })

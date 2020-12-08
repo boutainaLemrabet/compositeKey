@@ -5,13 +5,13 @@ import { switchMap, tap, filter } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JhiEventManager } from 'ng-jhipster';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
-import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
+import { ITEMS_PER_PAGE } from '../../core/config/pagination.constants';
 import {
   computeFilterMatchMode,
   lazyLoadEventToServerQueryParams,
   lazyLoadEventToRouterQueryParams,
   fillTableFromQueryParams,
-} from 'app/shared/util/request-util';
+} from 'app/core/request/request-util';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/user/account.model';
 import { UserService } from 'app/core/user/user.service';
@@ -110,7 +110,9 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   registerChangeInUsers(): void {
-    this.eventSubscriber = this.eventManager.subscribe('userListModification', () => {});
+    this.eventSubscriber = this.eventManager.subscribe('userListModification', () => {
+      // do nothing
+    });
   }
 
   setActive(user: IUser, isActivated: boolean): void {

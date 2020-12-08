@@ -9,7 +9,7 @@ import { EmployeeSkillUpdateComponent } from './employee-skill-update.component'
 @NgModule({
   imports: [SharedModule, RouterModule],
   declarations: [EmployeeSkillComponent, EmployeeSkillDetailComponent, EmployeeSkillUpdateComponent],
-  exports: [EmployeeSkillDetailComponent, EmployeeSkillUpdateComponent, EmployeeSkillDeleteDialogComponent],
+  exports: [EmployeeSkillDetailComponent, EmployeeSkillUpdateComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class EmployeeSkillModule {}

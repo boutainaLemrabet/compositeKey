@@ -48,6 +48,21 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.User.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Authority.class.getName());
             createCache(cm, com.mycompany.myapp.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.mycompany.myapp.domain.Employee.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Employee.class.getName() + ".teamMembers");
+            createCache(cm, com.mycompany.myapp.domain.Employee.class.getName() + ".skills");
+            createCache(cm, com.mycompany.myapp.domain.Employee.class.getName() + ".taughtSkills");
+            createCache(cm, com.mycompany.myapp.domain.EmployeeSkill.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.EmployeeSkill.class.getName() + ".employeeSkillCertificates");
+            createCache(cm, com.mycompany.myapp.domain.EmployeeSkill.class.getName() + ".tasks");
+            createCache(cm, com.mycompany.myapp.domain.CertificateType.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.CertificateType.class.getName() + ".employeeSkillCertificates");
+            createCache(cm, com.mycompany.myapp.domain.EmployeeSkillCertificate.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Task.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Task.class.getName() + ".employeeSkills");
+            createCache(cm, com.mycompany.myapp.domain.TaskComment.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.WithIdString.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.WithIdStringDetails.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

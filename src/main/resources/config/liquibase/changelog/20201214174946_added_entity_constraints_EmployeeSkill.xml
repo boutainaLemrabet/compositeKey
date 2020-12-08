@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+    <!--
+        Added the constraints for entity EmployeeSkill.
+    -->
+    <changeSet id="20201214174946-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="employee_skill_name,employee_skill_employee_username"
+                                 baseTableName="rel_employee_skill__task"
+                                 constraintName="fk_rel_employee_skill__task__employee_skill_id"
+                                 referencedColumnNames="name,employee_username"
+                                 referencedTableName="employee_skill"/>
+
+        <addForeignKeyConstraint baseColumnNames="task_id"
+                                 baseTableName="rel_employee_skill__task"
+                                 constraintName="fk_rel_employee_skill__task__task_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="task"/>
+        
+        <addForeignKeyConstraint baseColumnNames="employee_username"
+                                 baseTableName="employee_skill"
+                                 constraintName="fk_employee_skill__employee_id"
+                                 referencedColumnNames="username"
+                                 referencedTableName="employee"/>
+
+        <addForeignKeyConstraint baseColumnNames="teacher_username"
+                                 baseTableName="employee_skill"
+                                 constraintName="fk_employee_skill__teacher_id"
+                                 referencedColumnNames="username"
+                                 referencedTableName="employee"/>
+
+    </changeSet>
+</databaseChangeLog>

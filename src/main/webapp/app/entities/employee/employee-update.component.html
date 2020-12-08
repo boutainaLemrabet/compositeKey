@@ -4,10 +4,9 @@
             <h2 id="jhi-employee-heading" jhiTranslate="compositekeyApp.employee.home.createOrEditLabel">Create or edit a Employee</h2>
             <div class="form-grid ui-fluid">
                 <div class="p-field p-grid">
-                    <ng-container *ngIf="editForm.get('id')!.value">
                     <label jhiTranslate="compositekeyApp.employee.username" for="field_username" class="p-col-12 p-md-2">Username</label>
                     <div class="p-col-12 p-md-10">
-                        <input pInputText type="text" name="username" id="field_username" formControlName="username" readonly/>
+                        <input pInputText type="text" name="username" id="field_username" formControlName="username"/>
                         <div class="validation-messages">
                             <ng-container *ngIf="editForm.get('username')!.invalid && (editForm.get('username')!.dirty || editForm.get('username')!.touched)">
                                 <p-message severity="error"
@@ -16,7 +15,6 @@
                             </ng-container>
                         </div>
                     </div>
-                    </ng-container>
                 </div>
                 <div class="p-field p-grid">
                     <label jhiTranslate="compositekeyApp.employee.fullname" for="field_fullname" class="p-col-12 p-md-2">Fullname</label>
@@ -32,11 +30,11 @@
                     </div>
                 </div>
                     <div class="p-field p-grid">
-                        <label jhiTranslate="compositekeyApp.employee.undefined" for="field_" class="p-col-12 p-md-2"></label>
+                        <label jhiTranslate="compositekeyApp.employee.manager" for="field_manager" class="p-col-12 p-md-2">Employee</label>
                         <div class="p-col-12 p-md-10">
-                            <p-dropdown id="field_" name="" [options]="undefinedOptions" formControlName="managerUsername"
-                                        [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="FilterValue"
-                                        placeholder="Choose" optionLabel="" optionValue="username" [showClear]="true"></p-dropdown>
+                                <p-dropdown id="field_manager" name="manager" [options]="managerOptions!" formControlName="manager"
+                                            [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onManagerLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="managerFilterValue"
+                                            placeholder="Choose" optionLabel="fullname" optionValue="username" [showClear]="true"></p-dropdown>
                         </div>
                     </div>
             </div>

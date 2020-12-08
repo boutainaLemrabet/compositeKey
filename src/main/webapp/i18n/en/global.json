@@ -7,6 +7,14 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
+        "employee": "Employee",
+        "employeeSkill": "Employee Skill",
+        "certificateType": "Certificate Type",
+        "employeeSkillCertificate": "Employee Skill Certificate",
+        "task": "Task",
+        "taskComment": "Task Comment",
+        "withIdString": "With Id String",
+        "withIdStringDetails": "With Id String Details",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

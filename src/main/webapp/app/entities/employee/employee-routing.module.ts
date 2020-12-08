@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { Authority } from 'app/core/user/authority.model';
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { Authority } from '../../core/user/authority.model';
+import { UserRouteAccessService } from '../../core/auth/user-route-access.service';
 import { EmployeeComponent } from './employee.component';
 import { EmployeeDetailComponent } from './employee-detail.component';
 import { EmployeeUpdateComponent } from './employee-update.component';

@@ -24,7 +24,6 @@ export const userManagementRoute: Routes = [
   {
     path: '',
     component: UserManagementComponent,
-    component: UserManagementComponent,
     data: {
       pageTitle: 'userManagement.home.title',
     },

@@ -1,16 +1,14 @@
-import { Component, OnInit, Optional } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { lazyLoadEventToServerQueryParams } from 'app/shared/util/request-util';
+import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
 import { LazyLoadEvent } from 'primeng/api';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { IEmployee } from 'app/shared/model/employee.model';
+import { IEmployee } from '../../shared/model/employee.model';
 import { EmployeeService } from './employee.service';
 import { MessageService } from 'primeng/api';
-import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
-import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { DataUtils } from '../../core/util/data-util.service';
 
 @Component({
   selector: 'jhi-employee-update',
@@ -19,8 +17,8 @@ import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 export class EmployeeUpdateComponent implements OnInit {
   edit = false;
   isSaving = false;
-  Options: I[] | null = null;
-  FilterValue?: any;
+  managerOptions: IEmployee[] | null = null;
+  managerFilterValue?: any;
 
   editForm = this.fb.group({
     username: [null, [Validators.required]],
@@ -42,9 +40,9 @@ export class EmployeeUpdateComponent implements OnInit {
     });
   }
 
-  onLazyLoadEvent(event: LazyLoadEvent): void {
-    this.Service.query(lazyLoadEventToServerQueryParams(event, '.contains')).subscribe(
-      (res: HttpResponse<I[]>) => (this.Options = res.body),
+  onManagerLazyLoadEvent(event: LazyLoadEvent): void {
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'username.contains')).subscribe(
+      (res: HttpResponse<IEmployee[]>) => (this.managerOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
@@ -53,7 +51,7 @@ export class EmployeeUpdateComponent implements OnInit {
     if (employee) {
       this.edit = true;
       this.editForm.reset({ ...employee });
-      this.FilterValue = employee.managerUsername;
+      this.managerFilterValue = employee.manager!.username!;
     } else {
       this.edit = false;
       this.editForm.reset({});
@@ -92,5 +90,9 @@ export class EmployeeUpdateComponent implements OnInit {
 
   trackByUsername(index: number, item: IEmployee): string {
     return item.username!;
+  }
+
+  protected onError(errorMessage: string): void {
+    this.messageService.add({ severity: 'error', summary: errorMessage });
   }
 }

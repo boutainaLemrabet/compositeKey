@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="employeeSkill">
-            <h2 data-cy="employeeSkillDetailsHeading"><span jhiTranslate="compositekeyApp.employeeSkill.detail.title">Employee Skill</span> {{ employeeSkill.id }}</h2>
+            <h2 data-cy="employeeSkillDetailsHeading"><span jhiTranslate="compositekeyApp.employeeSkill.detail.title">Employee Skill</span> {{employeeSkill.name!}} / {{employeeSkill.employee!.username!}}</h2>
 
             <hr>
             <dl class="row-md jh-entity-details">

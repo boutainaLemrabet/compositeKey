@@ -1,7 +1,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div *ngIf="certificateType">
-            <h2 data-cy="certificateTypeDetailsHeading"><span jhiTranslate="compositekeyApp.certificateType.detail.title">Certificate Type</span> {{ certificateType.id }}</h2>
+            <h2 data-cy="certificateTypeDetailsHeading"><span jhiTranslate="compositekeyApp.certificateType.detail.title">Certificate Type</span> {{certificateType.id!}}</h2>
 
             <hr>
             <dl class="row-md jh-entity-details">

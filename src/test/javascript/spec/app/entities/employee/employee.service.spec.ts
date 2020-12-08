@@ -25,7 +25,7 @@ describe('Service Tests', () => {
       it('should find an element', () => {
         const returnedFromService = Object.assign({}, elemDefault);
 
-        service.find().subscribe(resp => (expectedResult = resp.body));
+        service.find('123').subscribe(resp => (expectedResult = resp.body));
 
         const req = httpMock.expectOne({ method: 'GET' });
         req.flush(returnedFromService);
@@ -87,7 +87,7 @@ describe('Service Tests', () => {
       });
 
       it('should delete a Employee', () => {
-        service.delete().subscribe(resp => (expectedResult = resp.ok));
+        service.delete('123').subscribe(resp => (expectedResult = resp.ok));
 
         const req = httpMock.expectOne({ method: 'DELETE' });
         req.flush({ status: 200 });

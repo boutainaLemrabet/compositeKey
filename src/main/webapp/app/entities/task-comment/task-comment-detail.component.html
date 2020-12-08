@@ -1,0 +1,24 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="taskComment">
+            <h2 data-cy="taskCommentDetailsHeading"><span jhiTranslate="compositekeyApp.taskComment.detail.title">Task Comment</span> {{taskComment.id!}}</h2>
+
+            <hr>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="compositekeyApp.taskComment.value">Value</span></dt>
+                <dd>
+                    <span>{{ taskComment.value }}</span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.taskComment.task">Task</span></dt>
+                <dd>
+                    <div *ngIf="taskComment.task">
+                        <a [routerLink]="['/task', taskComment!.task!.id!, 'view']">{{ taskComment!.task!.name }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button pButton type="submit" (click)="previousState()" class="ui-button-info" icon="pi pi-arrow-left" [label]="'entity.action.back' | translate" data-cy="entityDetailsBackButton"></button>
+            <button pButton type="button" icon="pi pi-pencil" [label]="'entity.action.edit' | translate" [routerLink]="['/task-comment', taskComment!.id, 'edit']"></button>
+        </div>
+    </div>
+</div>

@@ -83,11 +83,11 @@ describe('Component Tests', () => {
       spyOn(service, 'delete').and.returnValue(of({}));
 
       // WHEN
-      comp.delete();
+      comp.delete('123');
 
       // THEN
       expect(mockConfirmationService.confirmSpy).toHaveBeenCalled();
-      expect(service.delete).toHaveBeenCalledWith();
+      expect(service.delete).toHaveBeenCalledWith('123');
       expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
     }));
   });

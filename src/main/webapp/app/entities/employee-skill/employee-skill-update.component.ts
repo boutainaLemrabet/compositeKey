@@ -1,20 +1,18 @@
-import { Component, OnInit, Optional } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { lazyLoadEventToServerQueryParams } from 'app/shared/util/request-util';
+import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
 import { LazyLoadEvent } from 'primeng/api';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { IEmployeeSkill } from 'app/shared/model/employee-skill.model';
+import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 import { EmployeeSkillService } from './employee-skill.service';
 import { MessageService } from 'primeng/api';
-import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
-import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { ITask } from 'app/shared/model/task.model';
-import { TaskService } from 'app/entities/task/task.service';
-import { IEmployee } from 'app/shared/model/employee.model';
-import { EmployeeService } from 'app/entities/employee/employee.service';
+import { DataUtils } from '../../core/util/data-util.service';
+import { ITask } from '../../shared/model/task.model';
+import { TaskService } from '../task/task.service';
+import { IEmployee } from '../../shared/model/employee.model';
+import { EmployeeService } from '../employee/employee.service';
 
 @Component({
   selector: 'jhi-employee-skill-update',
@@ -23,11 +21,11 @@ import { EmployeeService } from 'app/entities/employee/employee.service';
 export class EmployeeSkillUpdateComponent implements OnInit {
   edit = false;
   isSaving = false;
-  Options: I[] | null = null;
-  Options: I[] | null = null;
-  FilterValue?: any;
-  Options: I[] | null = null;
-  FilterValue?: any;
+  taskOptions: ITask[] | null = null;
+  employeeOptions: IEmployee[] | null = null;
+  employeeFilterValue?: any;
+  teacherOptions: IEmployee[] | null = null;
+  teacherFilterValue?: any;
 
   editForm = this.fb.group({
     name: [null, [Validators.required]],
@@ -53,23 +51,23 @@ export class EmployeeSkillUpdateComponent implements OnInit {
     });
   }
 
-  onLazyLoadEvent(event: LazyLoadEvent): void {
-    this.Service.query(lazyLoadEventToServerQueryParams(event, '.contains')).subscribe(
-      (res: HttpResponse<I[]>) => (this.Options = res.body),
+  onTaskLazyLoadEvent(event: LazyLoadEvent): void {
+    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(
+      (res: HttpResponse<ITask[]>) => (this.taskOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
 
-  onLazyLoadEvent(event: LazyLoadEvent): void {
-    this.Service.query(lazyLoadEventToServerQueryParams(event, '.contains')).subscribe(
-      (res: HttpResponse<I[]>) => (this.Options = res.body),
+  onEmployeeLazyLoadEvent(event: LazyLoadEvent): void {
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'username.contains')).subscribe(
+      (res: HttpResponse<IEmployee[]>) => (this.employeeOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
 
-  onLazyLoadEvent(event: LazyLoadEvent): void {
-    this.Service.query(lazyLoadEventToServerQueryParams(event, '.contains')).subscribe(
-      (res: HttpResponse<I[]>) => (this.Options = res.body),
+  onTeacherLazyLoadEvent(event: LazyLoadEvent): void {
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'username.contains')).subscribe(
+      (res: HttpResponse<IEmployee[]>) => (this.teacherOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
@@ -78,8 +76,8 @@ export class EmployeeSkillUpdateComponent implements OnInit {
     if (employeeSkill) {
       this.edit = true;
       this.editForm.reset({ ...employeeSkill });
-      this.FilterValue = employeeSkill.employeeUsername;
-      this.FilterValue = employeeSkill.teacherUsername;
+      this.employeeFilterValue = employeeSkill.employee!.username!;
+      this.teacherFilterValue = employeeSkill.teacher!.username!;
     } else {
       this.edit = false;
       this.editForm.reset({});
@@ -122,5 +120,9 @@ export class EmployeeSkillUpdateComponent implements OnInit {
 
   trackByUsername(index: number, item: IEmployee): string {
     return item.username!;
+  }
+
+  protected onError(errorMessage: string): void {
+    this.messageService.add({ severity: 'error', summary: errorMessage });
   }
 }

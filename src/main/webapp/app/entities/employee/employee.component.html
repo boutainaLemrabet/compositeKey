@@ -1,19 +1,12 @@
 <div>
     <h2 id="page-heading" data-cy="EmployeeHeading">
         <span jhiTranslate="compositekeyApp.employee.home.title">Employees</span>
-
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-info mr-2" (click)="handleSyncList()" [disabled]="isLoading">
-                <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-                <span jhiTranslate="compositekeyApp.employee.home.refreshListLabel">Refresh List</span>
-            </button>
         <p-button id="jh-create-entity" class="float-right jh-create-entity create-employee" [routerLink]="['/employee/new']"
                   [label]="'compositekeyApp.employee.home.createLabel' | translate" icon="pi pi-plus" iconPos="left">
         </p-button>
-        </div>
     </h2>
     <br/>
-    <p-table #employeeTable [value]="employees" [rowTrackBy]="trackId" [responsive]="true" [lazy]="true" [rows]="itemsPerPage" [totalRecords]="totalItems" [loading]="loading" sortMode="multiple" [lazyLoadOnInit]="false" [paginator]="true" (onLazyLoad)="onLazyLoadEvent($event)" >
+    <p-table #employeeTable [value]="employees!" [rowTrackBy]="trackId" [responsive]="true" [lazy]="true" [rows]="itemsPerPage" [totalRecords]="totalItems!" [loading]="loading" sortMode="multiple" [lazyLoadOnInit]="false" [paginator]="true" (onLazyLoad)="onLazyLoadEvent($event)" >
         <ng-template pTemplate="header">
             <tr>
                 <th pSortableColumn="username">
@@ -24,9 +17,9 @@
                     <span jhiTranslate="compositekeyApp.employee.fullname">Fullname</span>
                     <p-sortIcon field="fullname"></p-sortIcon>
                 </th>
-                <th pSortableColumn="">
-                    <span jhiTranslate="compositekeyApp.employee.undefined"></span>
-                    <p-sortIcon field=""></p-sortIcon>
+                <th pSortableColumn="Employee">
+                    <span jhiTranslate="compositekeyApp.employee.Employee">Employee</span>
+                    <p-sortIcon field="Employee"></p-sortIcon>
                 </th>
                 <th style="width: 124px"></th>
             </tr>
@@ -40,8 +33,8 @@
                            (ngModelChange)="filter($event, 'fullname')">
                 </th>
                 <th>
-                    <p-multiSelect [options]="Options" [ngModel]="employeeTable.filters.managerUsername?.value" optionLabel="" optionValue="username"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onLazyLoadEvent($event)"
+                    <p-multiSelect [options]="managerOptions!" [ngModel]="employeeTable.filters.managerUsername?.value" optionLabel="" optionValue="username"
+                                   [lazy]="true" [rows]="10" (onLazyLoad)="onManagerLazyLoadEvent($event)"
                                    (ngModelChange)="filter($event, 'managerUsername')"></p-multiSelect>
                 </th>
                 <th></th>
@@ -64,10 +57,9 @@
                         <p-button type="submit" [routerLink]="['/employee', employee.username!, 'edit' ]"
                                   icon="pi pi-pencil" styleClass="ui-button-warning" data-cy="entityEditButton">
                         </p-button>
-                        <p-button type="submit" (click)="delete(employee)"
-                                  icon="pi pi-times" styleClass="ui-button-danger" data-cy="entityDeleteButton">
-                        </p-button>
-                    </div>
+                        <p-button type="submit" (click)="delete(employee.username)"
+                                          icon="pi pi-times" styleClass="ui-button-danger" data-cy="entityDeleteButton">
+                        </p-button>                    </div>
                 </td>
             </tr>
         </ng-template>

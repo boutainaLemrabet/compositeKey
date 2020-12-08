@@ -1,0 +1,34 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="employeeSkillCertificate">
+            <h2 data-cy="employeeSkillCertificateDetailsHeading"><span jhiTranslate="compositekeyApp.employeeSkillCertificate.detail.title">Employee Skill Certificate</span> {{employeeSkillCertificate.type!.id!}} / {{employeeSkillCertificate.skill!.name!}} / {{employeeSkillCertificate.skill!.employee!.username!}}</h2>
+
+            <hr>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="compositekeyApp.employeeSkillCertificate.grade">Grade</span></dt>
+                <dd>
+                    <span>{{ employeeSkillCertificate.grade }}</span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employeeSkillCertificate.date">Date</span></dt>
+                <dd>
+                    {{ employeeSkillCertificate.date | date:'mediumDate' }}
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employeeSkillCertificate.type">Type</span></dt>
+                <dd>
+                    <div *ngIf="employeeSkillCertificate.type">
+                        <a [routerLink]="['/certificate-type', employeeSkillCertificate!.type!.id!, 'view']">{{ employeeSkillCertificate!.type!.name }}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.employeeSkillCertificate.skill">Skill</span></dt>
+                <dd>
+                    <div *ngIf="employeeSkillCertificate.skill">
+                        <a [routerLink]="['/employee-skill', { name: employeeSkillCertificate!.skill!.name!, employeeUsername: employeeSkillCertificate!.skill!.employee!.username! }, 'view']">{{ employeeSkillCertificate!.skill!.name }} , {{ employeeSkillCertificate!.skill!.employee!.fullname }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button pButton type="submit" (click)="previousState()" class="ui-button-info" icon="pi pi-arrow-left" [label]="'entity.action.back' | translate" data-cy="entityDetailsBackButton"></button>
+            <button pButton type="button" icon="pi pi-pencil" [label]="'entity.action.edit' | translate" [routerLink]="['/employee-skill-certificate', { typeId: employeeSkillCertificate!.type!.id!, skillName: employeeSkillCertificate!.skill!.name!, skillEmployeeUsername: employeeSkillCertificate!.skill!.employee!.username! }, 'edit']"></button>
+        </div>
+    </div>
+</div>

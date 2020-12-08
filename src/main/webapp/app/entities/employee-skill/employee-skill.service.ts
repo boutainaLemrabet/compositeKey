@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/core/request/request-util';
-import { IEmployeeSkill } from 'app/shared/model/employee-skill.model';
+import { SERVER_API_URL } from '../../app.constants';
+import { createRequestOption } from '../../core/request/request-util';
+import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 
 type EntityResponseType = HttpResponse<IEmployeeSkill>;
 type EntityArrayResponseType = HttpResponse<IEmployeeSkill[]>;

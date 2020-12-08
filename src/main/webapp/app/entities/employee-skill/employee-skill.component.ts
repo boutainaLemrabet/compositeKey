@@ -1,27 +1,27 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { filter, tap, switchMap } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
 import { MessageService } from 'primeng/api';
-import { IEmployeeSkill } from 'app/shared/model/employee-skill.model';
+import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 import { EmployeeSkillService } from './employee-skill.service';
 
-import { ITEMS_PER_PAGE } from 'app/core/config/pagination.constants';
+import { ITEMS_PER_PAGE } from '../../core/config/pagination.constants';
 import {
   computeFilterMatchMode,
   lazyLoadEventToServerQueryParams,
   lazyLoadEventToRouterQueryParams,
   fillTableFromQueryParams,
-} from 'app/shared/util/request-util';
+} from '../../core/request/request-util';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
-import { I } from 'app/shared/model/.model';
-import { Service } from 'app/entities//.service';
-import { I } from 'app/shared/model/.model';
-import { Service } from 'app/entities//.service';
+
+import { ITask } from '../../shared/model/task.model';
+import { TaskService } from '../../entities/task/task.service';
+import { IEmployee } from '../../shared/model/employee.model';
+import { EmployeeService } from '../../entities/employee/employee.service';
 import { Table } from 'primeng/table';
 
 @Component({
@@ -31,15 +31,15 @@ import { Table } from 'primeng/table';
 export class EmployeeSkillComponent implements OnInit, OnDestroy {
   employeeSkills?: IEmployeeSkill[];
   eventSubscriber?: Subscription;
-  Options: I[] | null = null;
-  Options: I[] | null = null;
-  Options: I[] | null = null;
+  taskOptions: ITask[] | null = null;
+  employeeOptions: IEmployee[] | null = null;
+  teacherOptions: IEmployee[] | null = null;
 
   totalItems?: number;
   itemsPerPage!: number;
   loading!: boolean;
 
-  private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: any) => string; unflatten?: (_: string) => any } } = {
+  private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
     level: { matchMode: 'equals', unflatten: (x: string) => +x },
     taskId: { matchMode: 'in' },
     employeeUsername: { matchMode: 'in' },
@@ -51,8 +51,8 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
 
   constructor(
     protected employeeSkillService: EmployeeSkillService,
-    protected taskService: Service,
-    protected employeeService: Service,
+    protected taskService: TaskService,
+    protected employeeService: EmployeeService,
     protected messageService: MessageService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
@@ -65,7 +65,6 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.registerChangeInEmployeeSkills();
     this.activatedRoute.queryParams
       .pipe(
         tap(queryParams => fillTableFromQueryParams(this.employeeSkillTable, queryParams, this.filtersDetails)),
@@ -102,7 +101,7 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
     this.employeeSkillTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
   }
 
-  delete(name: undefined, employeeUsername: undefined): void {
+  delete(name: string, employeeUsername: string): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
       message: this.translateService.instant('primengtestApp.employeeSkill.delete.question', { id: name + ',' + employeeUsername }),
@@ -117,16 +116,20 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
     });
   }
 
-  onLazyLoadEvent(event: LazyLoadEvent): void {
-    this.taskService.query(lazyLoadEventToServerQueryParams(event, '.contains')).subscribe(res => (this.Options = res.body));
+  onTaskLazyLoadEvent(event: LazyLoadEvent): void {
+    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(res => (this.taskOptions = res.body));
   }
 
-  onLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService.query(lazyLoadEventToServerQueryParams(event, '.contains')).subscribe(res => (this.Options = res.body));
+  onEmployeeLazyLoadEvent(event: LazyLoadEvent): void {
+    this.employeeService
+      .query(lazyLoadEventToServerQueryParams(event, 'username.contains'))
+      .subscribe(res => (this.employeeOptions = res.body));
   }
 
-  onLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService.query(lazyLoadEventToServerQueryParams(event, '.contains')).subscribe(res => (this.Options = res.body));
+  onTeacherLazyLoadEvent(event: LazyLoadEvent): void {
+    this.employeeService
+      .query(lazyLoadEventToServerQueryParams(event, 'username.contains'))
+      .subscribe(res => (this.teacherOptions = res.body));
   }
 
   trackId(index: number, item: IEmployeeSkill): string {

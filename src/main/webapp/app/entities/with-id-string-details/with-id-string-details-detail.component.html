@@ -1,0 +1,28 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="withIdStringDetails">
+            <h2 data-cy="withIdStringDetailsDetailsHeading"><span jhiTranslate="compositekeyApp.withIdStringDetails.detail.title">With Id String Details</span> {{withIdStringDetails.withIdStringId!}}</h2>
+
+            <hr>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="compositekeyApp.withIdStringDetails.withIdStringId">With Id String Id</span></dt>
+                <dd>
+                    <span>{{ withIdStringDetails.withIdStringId }}</span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.withIdStringDetails.name">Name</span></dt>
+                <dd>
+                    <span>{{ withIdStringDetails.name }}</span>
+                </dd>
+                <dt><span jhiTranslate="compositekeyApp.withIdStringDetails.withIdString">With Id String</span></dt>
+                <dd>
+                    <div *ngIf="withIdStringDetails.withIdString">
+                        <a [routerLink]="['/with-id-string', withIdStringDetails!.withIdString!.id!, 'view']">{{ withIdStringDetails!.withIdString!.id }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button pButton type="submit" (click)="previousState()" class="ui-button-info" icon="pi pi-arrow-left" [label]="'entity.action.back' | translate" data-cy="entityDetailsBackButton"></button>
+            <button pButton type="button" icon="pi pi-pencil" [label]="'entity.action.edit' | translate" [routerLink]="['/with-id-string-details', withIdStringDetails!.withIdStringId, 'edit']"></button>
+        </div>
+    </div>
+</div>

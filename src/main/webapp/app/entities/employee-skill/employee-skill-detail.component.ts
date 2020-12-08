@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IEmployeeSkill } from 'app/shared/model/employee-skill.model';
+import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 
 @Component({
   selector: 'jhi-employee-skill-detail',

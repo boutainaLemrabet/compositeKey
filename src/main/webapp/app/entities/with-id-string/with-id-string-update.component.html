@@ -1,0 +1,28 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-with-id-string-heading" jhiTranslate="compositekeyApp.withIdString.home.createOrEditLabel">Create or edit a With Id String</h2>
+            <div class="form-grid ui-fluid">
+                <div class="p-field p-grid">
+                    <label jhiTranslate="compositekeyApp.withIdString.id" for="field_id" class="p-col-12 p-md-2">Id</label>
+                    <div class="p-col-12 p-md-10">
+                        <input pInputText type="text" name="id" id="field_id" formControlName="id"/>
+                        <div class="validation-messages">
+                            <ng-container *ngIf="editForm.get('id')!.invalid && (editForm.get('id')!.dirty || editForm.get('id')!.touched)">
+                                <p-message severity="error"
+                                           *ngIf="editForm.get('id')!.errors!.required" [text]="'entity.validation.required' | translate">
+                                </p-message>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+                <button pButton type="button" id="cancel-save" icon="pi pi-ban" class="ui-button-secondary" (click)="previousState()" [label]="'entity.action.cancel' | translate"></button>
+                <button pButton type="submit" id="save-entity" icon="pi pi-save" [disabled]="editForm.invalid || isSaving" [label]="'entity.action.save' | translate"></button>
+            </div>
+        </form>
+    </div>
+</div>

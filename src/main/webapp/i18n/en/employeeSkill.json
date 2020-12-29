@@ -19,9 +19,9 @@
       },
       "name": "Name",
       "level": "Level",
-      "Task": "Task",
-      "Employee": "Employee",
-      "Employee": "Employee"
+      "task": "Task",
+      "employee": "Employee",
+      "teacher": "Teacher"
     }
   }
 }

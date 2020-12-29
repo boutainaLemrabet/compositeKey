@@ -17,17 +17,13 @@
                     <span jhiTranslate="compositekeyApp.employeeSkillCertificate.date">Date</span>
                     <p-sortIcon field="date"></p-sortIcon>
                 </th>
-                <th pSortableColumn="CertificateType">
-                    <span jhiTranslate="compositekeyApp.employeeSkillCertificate.CertificateType">Certificate Type</span>
-                    <p-sortIcon field="CertificateType"></p-sortIcon>
+                <th pSortableColumn="type">
+                    <span jhiTranslate="compositekeyApp.employeeSkillCertificate.type">Certificate Type</span>
+                    <p-sortIcon field="type"></p-sortIcon>
                 </th>
-                <th pSortableColumn="EmployeeSkill">
-                    <span jhiTranslate="compositekeyApp.employeeSkillCertificate.EmployeeSkill">Employee Skill</span>
-                    <p-sortIcon field="EmployeeSkill"></p-sortIcon>
-                </th>
-                <th pSortableColumn="Employee">
-                    <span jhiTranslate="compositekeyApp.employeeSkillCertificate.Employee">Employee</span>
-                    <p-sortIcon field="Employee"></p-sortIcon>
+                <th pSortableColumn="skill">
+                    <span jhiTranslate="compositekeyApp.employeeSkillCertificate.skill">Employee Skill</span>
+                    <p-sortIcon field="skill"></p-sortIcon>
                 </th>
                 <th style="width: 124px"></th>
             </tr>
@@ -40,21 +36,16 @@
                     <p-calendar [(ngModel)]="dateRange" selectionMode="range" [readonlyInput]="true" [showButtonBar]="true"
                                 (onSelect)="onDateSelect(dateRange, 'date')" (onClearClick)="onDateSelect(dateRange, 'date')"></p-calendar>
                 </th>
-                <th>
-                    <p-multiSelect [options]="typeOptions!" [ngModel]="employeeSkillCertificateTable.filters.typeId?.value" optionLabel="" optionValue="id"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onTypeLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'typeId')"></p-multiSelect>
-                </th>
-                <th>
-                    <p-multiSelect [options]="skillOptions!" [ngModel]="employeeSkillCertificateTable.filters.skillName?.value" optionLabel="" optionValue="name"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onSkillLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'skillName')"></p-multiSelect>
-                </th>
-                <th>
-                    <p-multiSelect [options]="skillOptions!" [ngModel]="employeeSkillCertificateTable.filters.skillEmployeeUsername?.value" optionLabel="" optionValue="username"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onSkillLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'skillEmployeeUsername')"></p-multiSelect>
-                </th>
+                    <th>
+                        <p-multiSelect [options]="typeOptions!" [ngModel]="employeeSkillCertificateTable.filters['type.id']?.value" optionLabel="name" optionValue="id"
+                                       [lazy]="true" [rows]="10" (onLazyLoad)="onTypeLazyLoadEvent($event)"
+                                       (ngModelChange)="filter($event, 'type.id')"></p-multiSelect>
+                    </th>
+                    <th>
+                        <p-multiSelect [options]="skillOptions!" [ngModel]="employeeSkillCertificateTable.filters['skill.name']?.value" optionLabel="name" optionValue="name"
+                                       [lazy]="true" [rows]="10" (onLazyLoad)="onSkillLazyLoadEvent($event)"
+                                       (ngModelChange)="filter($event, 'skill.name')"></p-multiSelect>
+                    </th>
                 <th></th>
             </tr>
         </ng-template>

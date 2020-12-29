@@ -17,17 +17,13 @@
                     <span jhiTranslate="compositekeyApp.employeeSkill.level">Level</span>
                     <p-sortIcon field="level"></p-sortIcon>
                 </th>
-                <th pSortableColumn="Task">
-                    <span jhiTranslate="compositekeyApp.employeeSkill.Task">Task</span>
-                    <p-sortIcon field="Task"></p-sortIcon>
+                <th pSortableColumn="employee">
+                    <span jhiTranslate="compositekeyApp.employeeSkill.employee">Employee</span>
+                    <p-sortIcon field="employee"></p-sortIcon>
                 </th>
-                <th pSortableColumn="Employee">
-                    <span jhiTranslate="compositekeyApp.employeeSkill.Employee">Employee</span>
-                    <p-sortIcon field="Employee"></p-sortIcon>
-                </th>
-                <th pSortableColumn="Employee">
-                    <span jhiTranslate="compositekeyApp.employeeSkill.Employee">Employee</span>
-                    <p-sortIcon field="Employee"></p-sortIcon>
+                <th pSortableColumn="teacher">
+                    <span jhiTranslate="compositekeyApp.employeeSkill.teacher">Employee</span>
+                    <p-sortIcon field="teacher"></p-sortIcon>
                 </th>
                 <th style="width: 124px"></th>
             </tr>
@@ -40,21 +36,16 @@
                     <input pInputText type="number" [ngModel]="employeeSkillTable.filters.level?.value"
                            (ngModelChange)="filter($event, 'level')">
                 </th>
-                <th>
-                    <p-multiSelect [options]="taskOptions!" [ngModel]="employeeSkillTable.filters.taskId?.value" optionLabel="" optionValue="id"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onTaskLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'taskId')"></p-multiSelect>
-                </th>
-                <th>
-                    <p-multiSelect [options]="employeeOptions!" [ngModel]="employeeSkillTable.filters.employeeUsername?.value" optionLabel="" optionValue="username"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onEmployeeLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'employeeUsername')"></p-multiSelect>
-                </th>
-                <th>
-                    <p-multiSelect [options]="teacherOptions!" [ngModel]="employeeSkillTable.filters.teacherUsername?.value" optionLabel="" optionValue="username"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onTeacherLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'teacherUsername')"></p-multiSelect>
-                </th>
+                    <th>
+                        <p-multiSelect [options]="employeeOptions!" [ngModel]="employeeSkillTable.filters['employee.username']?.value" optionLabel="fullname" optionValue="username"
+                                       [lazy]="true" [rows]="10" (onLazyLoad)="onEmployeeLazyLoadEvent($event)"
+                                       (ngModelChange)="filter($event, 'employee.username')"></p-multiSelect>
+                    </th>
+                    <th>
+                        <p-multiSelect [options]="teacherOptions!" [ngModel]="employeeSkillTable.filters['teacher.username']?.value" optionLabel="fullname" optionValue="username"
+                                       [lazy]="true" [rows]="10" (onLazyLoad)="onTeacherLazyLoadEvent($event)"
+                                       (ngModelChange)="filter($event, 'teacher.username')"></p-multiSelect>
+                    </th>
                 <th></th>
             </tr>
         </ng-template>

@@ -8,7 +8,6 @@ import { LazyLoadEvent } from 'primeng/api';
 import { IEmployeeSkillCertificate } from '../../shared/model/employee-skill-certificate.model';
 import { EmployeeSkillCertificateService } from './employee-skill-certificate.service';
 import { MessageService } from 'primeng/api';
-import { DataUtils } from '../../core/util/data-util.service';
 import { ICertificateType } from '../../shared/model/certificate-type.model';
 import { CertificateTypeService } from '../certificate-type/certificate-type.service';
 import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
@@ -49,14 +48,14 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
   }
 
   onTypeLazyLoadEvent(event: LazyLoadEvent): void {
-    this.certificateTypeService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(
+    this.certificateTypeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<ICertificateType[]>) => (this.typeOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
 
   onSkillLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeSkillService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(
+    this.employeeSkillService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<IEmployeeSkill[]>) => (this.skillOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -104,14 +103,6 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
-  }
-
-  trackById(index: number, item: ICertificateType): number {
-    return item.id!;
-  }
-
-  trackByEmployeeSkillId(index: number, item: IEmployeeSkill): string {
-    return `${item.name!},${item.employee!.username!}`;
   }
 
   protected onError(errorMessage: string): void {

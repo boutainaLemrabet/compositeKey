@@ -30,12 +30,15 @@ public class TaskCommentCriteria implements Serializable, Criteria {
 
     private TaskCriteria task;
 
+    private String globalFilter;
+
     public TaskCommentCriteria() {}
 
     public TaskCommentCriteria(TaskCommentCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.value = other.value == null ? null : other.value.copy();
         this.task = other.task == null ? null : other.task.copy();
+        this.globalFilter = other.globalFilter;
     }
 
     @Override
@@ -67,6 +70,14 @@ public class TaskCommentCriteria implements Serializable, Criteria {
         this.task = task;
     }
 
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -76,12 +87,17 @@ public class TaskCommentCriteria implements Serializable, Criteria {
             return false;
         }
         final TaskCommentCriteria that = (TaskCommentCriteria) o;
-        return Objects.equals(id, that.id) && Objects.equals(value, that.value) && Objects.equals(task, that.task);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(value, that.value) &&
+            Objects.equals(task, that.task) &&
+            Objects.equals(globalFilter, that.globalFilter)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, value, task);
+        return Objects.hash(id, value, task, globalFilter);
     }
 
     // prettier-ignore
@@ -91,6 +107,7 @@ public class TaskCommentCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (value != null ? "value=" + value + ", " : "") +
             (task != null ? "task=" + task + ", " : "") +
+            (globalFilter != null ? "globalFilter=" + globalFilter + ", " : "") +
             "}";
     }
 }

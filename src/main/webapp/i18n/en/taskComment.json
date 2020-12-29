@@ -19,7 +19,7 @@
       },
       "id": "Id",
       "value": "Value",
-      "Task": "Task"
+      "task": "Task"
     }
   }
 }

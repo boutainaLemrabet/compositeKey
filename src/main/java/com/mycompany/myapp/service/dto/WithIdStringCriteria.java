@@ -28,11 +28,14 @@ public class WithIdStringCriteria implements Serializable, Criteria {
 
     private WithIdStringDetailsCriteria withIdStringDetails;
 
+    private String globalFilter;
+
     public WithIdStringCriteria() {}
 
     public WithIdStringCriteria(WithIdStringCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.withIdStringDetails = other.withIdStringDetails == null ? null : other.withIdStringDetails.copy();
+        this.globalFilter = other.globalFilter;
     }
 
     @Override
@@ -56,6 +59,14 @@ public class WithIdStringCriteria implements Serializable, Criteria {
         this.withIdStringDetails = withIdStringDetails;
     }
 
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -65,12 +76,16 @@ public class WithIdStringCriteria implements Serializable, Criteria {
             return false;
         }
         final WithIdStringCriteria that = (WithIdStringCriteria) o;
-        return Objects.equals(id, that.id) && Objects.equals(withIdStringDetails, that.withIdStringDetails);
+        return (
+            Objects.equals(id, that.id) &&
+            Objects.equals(withIdStringDetails, that.withIdStringDetails) &&
+            Objects.equals(globalFilter, that.globalFilter)
+        );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, withIdStringDetails);
+        return Objects.hash(id, withIdStringDetails, globalFilter);
     }
 
     // prettier-ignore
@@ -79,6 +94,7 @@ public class WithIdStringCriteria implements Serializable, Criteria {
         return "WithIdStringCriteria{" +
             (id != null ? "id=" + id + ", " : "") +
             (withIdStringDetails != null ? "withIdStringDetails=" + withIdStringDetails + ", " : "") +
+            (globalFilter != null ? "globalFilter=" + globalFilter + ", " : "") +
             "}";
     }
 }

@@ -10,7 +10,6 @@ import { EmployeeSkillCertificateService } from './employee-skill-certificate.se
 
 import { ITEMS_PER_PAGE } from '../../core/config/pagination.constants';
 import {
-  computeFilterMatchMode,
   lazyLoadEventToServerQueryParams,
   lazyLoadEventToRouterQueryParams,
   fillTableFromQueryParams,
@@ -22,8 +21,6 @@ import { ICertificateType } from '../../shared/model/certificate-type.model';
 import { CertificateTypeService } from '../../entities/certificate-type/certificate-type.service';
 import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 import { EmployeeSkillService } from '../../entities/employee-skill/employee-skill.service';
-import { IEmployee } from '../../shared/model/employee.model';
-import { EmployeeService } from '../../entities/employee/employee.service';
 import { Table } from 'primeng/table';
 import { DatePipe } from '@angular/common';
 
@@ -45,9 +42,17 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
   private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
     grade: { matchMode: 'equals', unflatten: (x: string) => +x },
     date: { matchMode: 'between', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
-    typeId: { matchMode: 'in' },
-    skillName: { matchMode: 'in' },
-    skillEmployeeUsername: { matchMode: 'in' },
+    ['type.id']: {
+      matchMode: 'in',
+      flatten: a => a.filter((x: string) => `${x}`).join(','),
+      unflatten: (a: string) => a.split(',').map(x => +x),
+    },
+    ['skill.name']: { matchMode: 'in', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
+    ['skill.employeeUsername']: {
+      matchMode: 'in',
+      flatten: a => a.filter((x: string) => x).join(','),
+      unflatten: (a: string) => a.split(','),
+    },
   };
 
   @ViewChild('employeeSkillCertificateTable', { static: true })
@@ -57,7 +62,6 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
     protected employeeSkillCertificateService: EmployeeSkillCertificateService,
     protected certificateTypeService: CertificateTypeService,
     protected employeeSkillService: EmployeeSkillService,
-    protected employeeService: EmployeeService,
     protected messageService: MessageService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
@@ -74,10 +78,7 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams
       .pipe(
         tap(queryParams => fillTableFromQueryParams(this.employeeSkillCertificateTable, queryParams, this.filtersDetails)),
-        tap(() => (this.dateRange = this.employeeSkillCertificateTable.filters.date.value?.map((x: string) => new Date(x)) as Date[])),
-        // this.employeeSkillCertificateTable.filters.date &&
-        // this.employeeSkillCertificateTable.filters.date.value &&
-        // this.employeeSkillCertificateTable.filters.date.value.map((x: string) => new Date(x))),
+        tap(() => this.employeeSkillCertificateTable.filters.date?.value?.map((x: string) => new Date(x)) as Date[]),
         tap(() => (this.loading = true)),
         switchMap(() =>
           this.employeeSkillCertificateService.query(
@@ -110,14 +111,14 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.employeeSkillCertificateTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.employeeSkillCertificateTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(typeId: number, skillName: string, skillEmployeeUsername: string): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
-      message: this.translateService.instant('primengtestApp.employeeSkillCertificate.delete.question', {
-        id: typeId + ',' + skillName + ',' + skillEmployeeUsername,
+      message: this.translateService.instant('compositekeyApp.employeeSkillCertificate.delete.question', {
+        id: `${typeId} , ${skillName} , ${skillEmployeeUsername}`,
       }),
       accept: () => {
         this.employeeSkillCertificateService.delete(typeId, skillName, skillEmployeeUsername).subscribe(() => {
@@ -132,13 +133,13 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
 
   onTypeLazyLoadEvent(event: LazyLoadEvent): void {
     this.certificateTypeService
-      .query(lazyLoadEventToServerQueryParams(event, 'id.contains'))
+      .query(lazyLoadEventToServerQueryParams(event, 'globalFilter'))
       .subscribe(res => (this.typeOptions = res.body));
   }
 
   onSkillLazyLoadEvent(event: LazyLoadEvent): void {
     this.employeeSkillService
-      .query(lazyLoadEventToServerQueryParams(event, 'id.contains'))
+      .query(lazyLoadEventToServerQueryParams(event, 'globalFilter'))
       .subscribe(res => (this.skillOptions = res.body));
   }
 

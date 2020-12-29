@@ -6,7 +6,7 @@ import { JhiEventManager } from 'ng-jhipster';
 import { MessageService } from 'primeng/api';
 import { IWithIdStringDetails } from '../../shared/model/with-id-string-details.model';
 import { WithIdStringDetailsService } from './with-id-string-details.service';
-import { computeFilterMatchMode, lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
+import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -24,7 +24,9 @@ export class WithIdStringDetailsComponent implements OnInit, OnDestroy {
   withIdStringOptions: IWithIdString[] | null = null;
 
   private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
-    withIdStringId: { matchMode: 'in' },
+    withIdStringId: { matchMode: 'contains' },
+    name: { matchMode: 'contains' },
+    ['withIdString.id']: { matchMode: 'in', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
   };
 
   @ViewChild('withIdStringDetailsTable', { static: true })
@@ -65,13 +67,13 @@ export class WithIdStringDetailsComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.withIdStringDetailsTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.withIdStringDetailsTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(withIdStringId: string): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
-      message: this.translateService.instant('primengtestApp.withIdStringDetails.delete.question', { id: withIdStringId }),
+      message: this.translateService.instant('compositekeyApp.withIdStringDetails.delete.question', { id: `${withIdStringId}` }),
       accept: () => {
         this.withIdStringDetailsService.delete(withIdStringId).subscribe(() => {
           this.eventManager.broadcast({
@@ -85,7 +87,7 @@ export class WithIdStringDetailsComponent implements OnInit, OnDestroy {
 
   onWithIdStringLazyLoadEvent(event: LazyLoadEvent): void {
     this.withIdStringService
-      .query(lazyLoadEventToServerQueryParams(event, 'id.contains'))
+      .query(lazyLoadEventToServerQueryParams(event, 'globalFilter'))
       .subscribe(res => (this.withIdStringOptions = res.body));
   }
 

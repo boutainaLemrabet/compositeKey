@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.StringFilter;
 
 /**
  * Service for executing complex queries for {@link Employee} entities in the database.
@@ -155,6 +156,24 @@ public class EmployeeQueryService extends QueryService<Employee> {
                             );
                         }
                     );
+            }
+            if (criteria.getGlobalFilter() != null) {
+                Specification<Employee> orSpecification = Specification.where(null);
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get(Employee_.username), "%" + criteria.getGlobalFilter() + "%")
+                        )
+                    );
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get(Employee_.fullname), "%" + criteria.getGlobalFilter() + "%")
+                        )
+                    );
+                specification = specification.and(orSpecification);
             }
         }
         return specification;

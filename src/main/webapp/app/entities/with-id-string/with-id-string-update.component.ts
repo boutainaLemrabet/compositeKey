@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { IWithIdString } from '../../shared/model/with-id-string.model';
 import { WithIdStringService } from './with-id-string.service';
-import { DataUtils } from '../../core/util/data-util.service';
 
 @Component({
   selector: 'jhi-with-id-string-update',

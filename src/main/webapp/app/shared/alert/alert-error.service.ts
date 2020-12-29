@@ -27,7 +27,7 @@ export class AlertErrorService {
           }
         });
         if (errorHeader) {
-          const entityName = this.translateService.instant('global.menu.entities.' + entityKey);
+          const entityName = entityKey ? this.translateService.instant(`global.menu.entities.${entityKey as string}`) : undefined;
           this.messageService.add({ severity: 'error', summary: this.translateService.instant(errorHeader, { entityName }) });
         } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
           const fieldErrors = httpErrorResponse.error.fieldErrors;
@@ -38,10 +38,12 @@ export class AlertErrorService {
             }
             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
             const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-            const fieldName = this.translateService.instant('compositekeyApp.' + fieldError.objectName + '.' + convertedField);
+            const fieldName: string = this.translateService.instant(
+              `compositekeyApp.${fieldError.objectName as string}.${convertedField as string}`
+            );
             this.messageService.add({
               severity: 'error',
-              summary: this.translateService.instant('error.' + fieldError.message, { fieldName }),
+              summary: this.translateService.instant(`error.${fieldError.message as string}`, { fieldName }),
             });
           }
         } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {

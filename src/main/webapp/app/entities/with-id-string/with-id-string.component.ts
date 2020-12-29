@@ -6,7 +6,6 @@ import { JhiEventManager } from 'ng-jhipster';
 import { MessageService } from 'primeng/api';
 import { IWithIdString } from '../../shared/model/with-id-string.model';
 import { WithIdStringService } from './with-id-string.service';
-import { computeFilterMatchMode } from '../../core/request/request-util';
 import { ConfirmationService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -20,7 +19,9 @@ export class WithIdStringComponent implements OnInit, OnDestroy {
   withIdStrings?: IWithIdString[];
   eventSubscriber?: Subscription;
 
-  private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {};
+  private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
+    id: { matchMode: 'contains' },
+  };
 
   @ViewChild('withIdStringTable', { static: true })
   withIdStringTable!: Table;
@@ -59,13 +60,13 @@ export class WithIdStringComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.withIdStringTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.withIdStringTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(id: string): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
-      message: this.translateService.instant('primengtestApp.withIdString.delete.question', { id: id }),
+      message: this.translateService.instant('compositekeyApp.withIdString.delete.question', { id }),
       accept: () => {
         this.withIdStringService.delete(id).subscribe(() => {
           this.eventManager.broadcast({

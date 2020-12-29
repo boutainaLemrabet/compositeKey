@@ -6,7 +6,6 @@ import { JhiEventManager } from 'ng-jhipster';
 import { MessageService } from 'primeng/api';
 import { ICertificateType } from '../../shared/model/certificate-type.model';
 import { CertificateTypeService } from './certificate-type.service';
-import { computeFilterMatchMode } from '../../core/request/request-util';
 import { ConfirmationService } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -22,6 +21,7 @@ export class CertificateTypeComponent implements OnInit, OnDestroy {
 
   private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
     id: { matchMode: 'equals', unflatten: (x: string) => +x },
+    name: { matchMode: 'contains' },
   };
 
   @ViewChild('certificateTypeTable', { static: true })
@@ -61,13 +61,13 @@ export class CertificateTypeComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.certificateTypeTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.certificateTypeTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(id: number): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
-      message: this.translateService.instant('primengtestApp.certificateType.delete.question', { id: id }),
+      message: this.translateService.instant('compositekeyApp.certificateType.delete.question', { id }),
       accept: () => {
         this.certificateTypeService.delete(id).subscribe(() => {
           this.eventManager.broadcast({

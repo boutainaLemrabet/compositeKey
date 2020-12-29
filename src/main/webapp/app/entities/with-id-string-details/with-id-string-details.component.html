@@ -16,8 +16,8 @@
                     <span jhiTranslate="compositekeyApp.withIdStringDetails.name">Name</span>
                 </th>
                 <th>
-                    <span jhiTranslate="compositekeyApp.withIdStringDetails.WithIdString">With Id String</span>
-                    
+                    <span jhiTranslate="compositekeyApp.withIdStringDetails.withIdString">With Id String</span>
+
                 </th>
                 <th style="width: 124px"></th>
             </tr>
@@ -30,11 +30,11 @@
                     <input pInputText type="text" [ngModel]="withIdStringDetailsTable.filters.name?.value"
                            (ngModelChange)="filter($event, 'name')">
                 </th>
-                <th>
-                    <p-multiSelect [options]="withIdStringOptions!" [ngModel]="withIdStringDetailsTable.filters.withIdStringId?.value" optionLabel="" optionValue="id"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onWithIdStringLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'withIdStringId')"></p-multiSelect>
-                </th>
+                    <th>
+                        <p-multiSelect [options]="withIdStringOptions!" [ngModel]="withIdStringDetailsTable.filters['withIdString.id']?.value" optionLabel="id" optionValue="id"
+                                       [lazy]="true" [rows]="10" (onLazyLoad)="onWithIdStringLazyLoadEvent($event)"
+                                       (ngModelChange)="filter($event, 'withIdString.id')"></p-multiSelect>
+                    </th>
                 <th></th>
             </tr>
         </ng-template>

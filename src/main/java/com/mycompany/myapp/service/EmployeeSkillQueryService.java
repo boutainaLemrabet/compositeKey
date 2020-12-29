@@ -17,6 +17,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.RangeFilter;
+import tech.jhipster.service.filter.StringFilter;
 
 /**
  * Service for executing complex queries for {@link EmployeeSkill} entities in the database.
@@ -158,6 +160,39 @@ public class EmployeeSkillQueryService extends QueryService<EmployeeSkill> {
                             );
                         }
                     );
+            }
+            if (criteria.getGlobalFilter() != null) {
+                Specification<EmployeeSkill> orSpecification = Specification.where(null);
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get(EmployeeSkill_.name), "%" + criteria.getGlobalFilter() + "%")
+                        )
+                    );
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(
+                                    root.get(EmployeeSkill_.id).get(EmployeeSkillId_.employeeUsername),
+                                    "%" + criteria.getGlobalFilter() + "%"
+                                )
+                        )
+                    );
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (
+                                (root, criteriaQuery, criteriaBuilder) ->
+                                    criteriaBuilder.like(
+                                        root.get(EmployeeSkill_.employee).get(Employee_.fullname),
+                                        "%" + criteria.getGlobalFilter() + "%"
+                                    )
+                            )
+                        )
+                    );
+                specification = specification.and(orSpecification);
             }
         }
         return specification;

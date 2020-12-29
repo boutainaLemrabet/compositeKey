@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/api';
 import { ITask } from '../../shared/model/task.model';
 import { TaskType, TASK_TYPE_ARRAY } from '../../shared/model/enumerations/task-type.model';
 import { TaskService } from './task.service';
-import { computeFilterMatchMode, lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
+import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -15,7 +15,6 @@ import { IUser } from '../../core/user/user.model';
 import { UserService } from '../../core/user/user.service';
 import { Table } from 'primeng/table';
 import { DatePipe } from '@angular/common';
-import { DataUtils } from '../../core/util/data-util.service';
 
 @Component({
   selector: 'jhi-task',
@@ -29,12 +28,17 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
     id: { matchMode: 'equals', unflatten: (x: string) => +x },
+    name: { matchMode: 'contains' },
     type: { matchMode: 'in' },
     endDate: { matchMode: 'between', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
     createdAt: { matchMode: 'between', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
     modifiedAt: { matchMode: 'between', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
     done: { matchMode: 'equals', unflatten: (x: string) => x === 'true' },
-    userId: { matchMode: 'in' },
+    ['user.id']: {
+      matchMode: 'in',
+      flatten: a => a.filter((x: string) => `${x}`).join(','),
+      unflatten: (a: string) => a.split(',').map(x => +x),
+    },
   };
 
   @ViewChild('taskTable', { static: true })
@@ -77,13 +81,13 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.taskTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.taskTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(id: number): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
-      message: this.translateService.instant('primengtestApp.task.delete.question', { id: id }),
+      message: this.translateService.instant('compositekeyApp.task.delete.question', { id }),
       accept: () => {
         this.taskService.delete(id).subscribe(() => {
           this.eventManager.broadcast({
@@ -96,7 +100,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   onUserLazyLoadEvent(event: LazyLoadEvent): void {
-    this.userService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(res => (this.userOptions = res.body));
+    this.userService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(res => (this.userOptions = res.body));
   }
 
   trackId(index: number, item: ITask): number {

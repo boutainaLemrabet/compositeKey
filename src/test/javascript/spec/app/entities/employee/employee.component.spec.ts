@@ -1,16 +1,14 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { Table, TableModule } from 'primeng/table';
 import { of, BehaviorSubject } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { compositekeyAppTestModule } from '../../../test.module';
 import { EmployeeComponent } from 'app/entities/employee/employee.component';
 import { EmployeeService } from 'app/entities/employee/employee.service';
 import { Employee } from 'app/shared/model/employee.model';
 import { ConfirmationService } from 'primeng/api';
 
-import { MockActivatedRoute } from '../../../helpers/mock-route.service';
-import { MockTable } from '../../../helpers/mock-table';
 import { JhiEventManager } from 'ng-jhipster';
 
 describe('Component Tests', () => {
@@ -20,20 +18,26 @@ describe('Component Tests', () => {
     let service: EmployeeService;
     let mockConfirmationService: any;
 
-    let activatedRoute: MockActivatedRoute;
+    let activatedRoute: ActivatedRoute;
     let mockEventManager: any;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientTestingModule],
+        imports: [HttpClientTestingModule, TableModule],
         declarations: [EmployeeComponent],
+        providers: [
+          {
+            provide: ActivatedRoute,
+            useValue: of(),
+          },
+        ],
       })
         .overrideTemplate(EmployeeComponent, '')
         .compileComponents();
 
       fixture = TestBed.createComponent(EmployeeComponent);
       comp = fixture.componentInstance;
-      comp.employeeTable = new MockTable() as any;
+      comp.employeeTable = fixture.debugElement.children[0].componentInstance;
       service = TestBed.inject(EmployeeService);
       mockConfirmationService = fixture.debugElement.injector.get(ConfirmationService);
       activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);

@@ -17,9 +17,9 @@
                     <span jhiTranslate="compositekeyApp.employee.fullname">Fullname</span>
                     <p-sortIcon field="fullname"></p-sortIcon>
                 </th>
-                <th pSortableColumn="Employee">
-                    <span jhiTranslate="compositekeyApp.employee.Employee">Employee</span>
-                    <p-sortIcon field="Employee"></p-sortIcon>
+                <th pSortableColumn="manager">
+                    <span jhiTranslate="compositekeyApp.employee.manager">Employee</span>
+                    <p-sortIcon field="manager"></p-sortIcon>
                 </th>
                 <th style="width: 124px"></th>
             </tr>
@@ -32,11 +32,11 @@
                     <input pInputText type="text" [ngModel]="employeeTable.filters.fullname?.value"
                            (ngModelChange)="filter($event, 'fullname')">
                 </th>
-                <th>
-                    <p-multiSelect [options]="managerOptions!" [ngModel]="employeeTable.filters.managerUsername?.value" optionLabel="" optionValue="username"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onManagerLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'managerUsername')"></p-multiSelect>
-                </th>
+                    <th>
+                        <p-multiSelect [options]="managerOptions!" [ngModel]="employeeTable.filters['manager.username']?.value" optionLabel="fullname" optionValue="username"
+                                       [lazy]="true" [rows]="10" (onLazyLoad)="onManagerLazyLoadEvent($event)"
+                                       (ngModelChange)="filter($event, 'manager.username')"></p-multiSelect>
+                    </th>
                 <th></th>
             </tr>
         </ng-template>

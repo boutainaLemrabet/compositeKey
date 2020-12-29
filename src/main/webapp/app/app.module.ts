@@ -28,6 +28,7 @@ import { PageRibbonComponent } from './layouts/profiles/page-ribbon.component';
 import { ActiveMenuDirective } from './layouts/navbar/active-menu.directive';
 import { ErrorComponent } from './layouts/error/error.component';
 import { MessageService, ConfirmationService } from 'primeng/api';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   imports: [
@@ -61,6 +62,7 @@ import { MessageService, ConfirmationService } from 'primeng/api';
     httpInterceptorProviders,
     MessageService,
     ConfirmationService,
+    DatePipe,
   ],
   declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
   bootstrap: [MainComponent],

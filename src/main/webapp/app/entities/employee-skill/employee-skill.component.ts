@@ -10,7 +10,6 @@ import { EmployeeSkillService } from './employee-skill.service';
 
 import { ITEMS_PER_PAGE } from '../../core/config/pagination.constants';
 import {
-  computeFilterMatchMode,
   lazyLoadEventToServerQueryParams,
   lazyLoadEventToRouterQueryParams,
   fillTableFromQueryParams,
@@ -18,8 +17,6 @@ import {
 import { ConfirmationService, LazyLoadEvent } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 
-import { ITask } from '../../shared/model/task.model';
-import { TaskService } from '../../entities/task/task.service';
 import { IEmployee } from '../../shared/model/employee.model';
 import { EmployeeService } from '../../entities/employee/employee.service';
 import { Table } from 'primeng/table';
@@ -31,7 +28,6 @@ import { Table } from 'primeng/table';
 export class EmployeeSkillComponent implements OnInit, OnDestroy {
   employeeSkills?: IEmployeeSkill[];
   eventSubscriber?: Subscription;
-  taskOptions: ITask[] | null = null;
   employeeOptions: IEmployee[] | null = null;
   teacherOptions: IEmployee[] | null = null;
 
@@ -40,10 +36,10 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
   loading!: boolean;
 
   private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
+    name: { matchMode: 'contains' },
     level: { matchMode: 'equals', unflatten: (x: string) => +x },
-    taskId: { matchMode: 'in' },
-    employeeUsername: { matchMode: 'in' },
-    teacherUsername: { matchMode: 'in' },
+    ['employee.username']: { matchMode: 'in', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
+    ['teacher.username']: { matchMode: 'in', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
   };
 
   @ViewChild('employeeSkillTable', { static: true })
@@ -51,7 +47,6 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
 
   constructor(
     protected employeeSkillService: EmployeeSkillService,
-    protected taskService: TaskService,
     protected employeeService: EmployeeService,
     protected messageService: MessageService,
     protected activatedRoute: ActivatedRoute,
@@ -98,13 +93,13 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.employeeSkillTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.employeeSkillTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(name: string, employeeUsername: string): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
-      message: this.translateService.instant('primengtestApp.employeeSkill.delete.question', { id: name + ',' + employeeUsername }),
+      message: this.translateService.instant('compositekeyApp.employeeSkill.delete.question', { id: `${name} , ${employeeUsername}` }),
       accept: () => {
         this.employeeSkillService.delete(name, employeeUsername).subscribe(() => {
           this.eventManager.broadcast({
@@ -116,20 +111,12 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
     });
   }
 
-  onTaskLazyLoadEvent(event: LazyLoadEvent): void {
-    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(res => (this.taskOptions = res.body));
-  }
-
   onEmployeeLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService
-      .query(lazyLoadEventToServerQueryParams(event, 'username.contains'))
-      .subscribe(res => (this.employeeOptions = res.body));
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(res => (this.employeeOptions = res.body));
   }
 
   onTeacherLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService
-      .query(lazyLoadEventToServerQueryParams(event, 'username.contains'))
-      .subscribe(res => (this.teacherOptions = res.body));
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(res => (this.teacherOptions = res.body));
   }
 
   trackId(index: number, item: IEmployeeSkill): string {

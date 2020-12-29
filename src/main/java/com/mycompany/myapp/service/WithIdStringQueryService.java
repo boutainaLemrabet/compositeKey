@@ -112,6 +112,18 @@ public class WithIdStringQueryService extends QueryService<WithIdString> {
                         }
                     );
             }
+
+            if (criteria.getGlobalFilter() != null) {
+                Specification<WithIdString> orSpecification = Specification.where(null);
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get(WithIdString_.id), "%" + criteria.getGlobalFilter() + "%")
+                        )
+                    );
+                specification = specification.and(orSpecification);
+            }
         }
         return specification;
     }

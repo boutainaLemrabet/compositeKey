@@ -8,7 +8,6 @@ import { LazyLoadEvent } from 'primeng/api';
 import { ITaskComment } from '../../shared/model/task-comment.model';
 import { TaskCommentService } from './task-comment.service';
 import { MessageService } from 'primeng/api';
-import { DataUtils } from '../../core/util/data-util.service';
 import { ITask } from '../../shared/model/task.model';
 import { TaskService } from '../task/task.service';
 
@@ -42,7 +41,7 @@ export class TaskCommentUpdateComponent implements OnInit {
   }
 
   onTaskLazyLoadEvent(event: LazyLoadEvent): void {
-    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(
+    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<ITask[]>) => (this.taskOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -84,10 +83,6 @@ export class TaskCommentUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
-  }
-
-  trackById(index: number, item: ITask): number {
-    return item.id!;
   }
 
   protected onError(errorMessage: string): void {

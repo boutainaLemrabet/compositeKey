@@ -19,9 +19,8 @@
       },
       "grade": "Grade",
       "date": "Date",
-      "CertificateType": "Certificate Type",
-      "EmployeeSkill": "Employee Skill",
-      "Employee": "Employee"
+      "type": "Type",
+      "skill": "Skill"
     }
   }
 }

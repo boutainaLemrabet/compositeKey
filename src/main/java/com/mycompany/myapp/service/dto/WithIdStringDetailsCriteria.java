@@ -30,12 +30,15 @@ public class WithIdStringDetailsCriteria implements Serializable, Criteria {
 
     private WithIdStringCriteria withIdString;
 
+    private String globalFilter;
+
     public WithIdStringDetailsCriteria() {}
 
     public WithIdStringDetailsCriteria(WithIdStringDetailsCriteria other) {
         this.withIdStringId = other.withIdStringId == null ? null : other.withIdStringId.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.withIdString = other.withIdString == null ? null : other.withIdString.copy();
+        this.globalFilter = other.globalFilter;
     }
 
     @Override
@@ -67,6 +70,14 @@ public class WithIdStringDetailsCriteria implements Serializable, Criteria {
         this.withIdString = withIdString;
     }
 
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,13 +90,14 @@ public class WithIdStringDetailsCriteria implements Serializable, Criteria {
         return (
             Objects.equals(withIdStringId, that.withIdStringId) &&
             Objects.equals(name, that.name) &&
-            Objects.equals(withIdString, that.withIdString)
+            Objects.equals(withIdString, that.withIdString) &&
+            Objects.equals(globalFilter, that.globalFilter)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(withIdStringId, name, withIdString);
+        return Objects.hash(withIdStringId, name, withIdString, globalFilter);
     }
 
     // prettier-ignore
@@ -95,6 +107,7 @@ public class WithIdStringDetailsCriteria implements Serializable, Criteria {
             (withIdStringId != null ? "withIdStringId=" + withIdStringId + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (withIdString != null ? "withIdString=" + withIdString + ", " : "") +
+            (globalFilter != null ? "globalFilter=" + globalFilter + ", " : "") +
             "}";
     }
 }

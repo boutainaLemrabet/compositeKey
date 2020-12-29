@@ -10,7 +10,6 @@ import { EmployeeService } from './employee.service';
 
 import { ITEMS_PER_PAGE } from '../../core/config/pagination.constants';
 import {
-  computeFilterMatchMode,
   lazyLoadEventToServerQueryParams,
   lazyLoadEventToRouterQueryParams,
   fillTableFromQueryParams,
@@ -34,7 +33,9 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   loading!: boolean;
 
   private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
-    managerUsername: { matchMode: 'in' },
+    username: { matchMode: 'contains' },
+    fullname: { matchMode: 'contains' },
+    ['manager.username']: { matchMode: 'in', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
   };
 
   @ViewChild('employeeTable', { static: true })
@@ -85,13 +86,13 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.employeeTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.employeeTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(username: string): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
-      message: this.translateService.instant('primengtestApp.employee.delete.question', { id: username }),
+      message: this.translateService.instant('compositekeyApp.employee.delete.question', { id: `${username}` }),
       accept: () => {
         this.employeeService.delete(username).subscribe(() => {
           this.eventManager.broadcast({
@@ -104,9 +105,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
 
   onManagerLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService
-      .query(lazyLoadEventToServerQueryParams(event, 'username.contains'))
-      .subscribe(res => (this.managerOptions = res.body));
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(res => (this.managerOptions = res.body));
   }
 
   trackId(index: number, item: IEmployee): string {

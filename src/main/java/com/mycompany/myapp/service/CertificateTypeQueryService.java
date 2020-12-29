@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.StringFilter;
 
 /**
  * Service for executing complex queries for {@link CertificateType} entities in the database.
@@ -114,6 +115,18 @@ public class CertificateTypeQueryService extends QueryService<CertificateType> {
                             );
                         }
                     );
+            }
+
+            if (criteria.getGlobalFilter() != null) {
+                Specification<CertificateType> orSpecification = Specification.where(null);
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get(CertificateType_.name), "%" + criteria.getGlobalFilter() + "%")
+                        )
+                    );
+                specification = specification.and(orSpecification);
             }
         }
         return specification;

@@ -1,12 +1,10 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
 import { LazyLoadEvent } from 'primeng/api';
-import * as dayjs from 'dayjs';
-import { DATE_TIME_FORMAT } from '../../core/config/input.constants';
 import { ITask } from '../../shared/model/task.model';
 import { TaskType, TASK_TYPE_ARRAY } from '../../shared/model/enumerations/task-type.model';
 import { TaskService } from './task.service';
@@ -60,7 +58,7 @@ export class TaskUpdateComponent implements OnInit {
   }
 
   onUserLazyLoadEvent(event: LazyLoadEvent): void {
-    this.userService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(
+    this.userService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<IUser[]>) => (this.userOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -71,14 +69,14 @@ export class TaskUpdateComponent implements OnInit {
       this.editForm.reset({ ...task });
       if (task.attachment) {
         fetch(`data:${task.attachmentContentType!};base64,${task.attachment}`)
-          .then((res: any) => res.blob())
+          .then((res: any) => res.blob() as string)
           .then(blob => {
             this.attachmentFile = new File([blob], '', { type: task.attachmentContentType });
           });
       }
       if (task.picture) {
         fetch(`data:${task.pictureContentType!};base64,${task.picture}`)
-          .then((res: any) => res.blob())
+          .then((res: any) => res.blob() as string)
           .then(blob => {
             this.pictureFile = new File([blob], '', { type: task.pictureContentType });
           });
@@ -117,8 +115,6 @@ export class TaskUpdateComponent implements OnInit {
   save(): void {
     this.isSaving = true;
     const task = this.editForm.value;
-    task.createdAt = task.createdAt ? dayjs(task.createdAt, DATE_TIME_FORMAT) : null;
-    task.modifiedAt = task.modifiedAt ? dayjs(task.modifiedAt, DATE_TIME_FORMAT) : null;
     if (task.id !== null) {
       this.subscribeToSaveResponse(this.taskService.update(task));
     } else {
@@ -140,10 +136,6 @@ export class TaskUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
-  }
-
-  trackById(index: number, item: IUser): number {
-    return item.id!;
   }
 
   protected onError(errorMessage: string): void {

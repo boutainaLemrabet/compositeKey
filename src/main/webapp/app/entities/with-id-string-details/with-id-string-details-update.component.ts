@@ -8,7 +8,6 @@ import { LazyLoadEvent } from 'primeng/api';
 import { IWithIdStringDetails } from '../../shared/model/with-id-string-details.model';
 import { WithIdStringDetailsService } from './with-id-string-details.service';
 import { MessageService } from 'primeng/api';
-import { DataUtils } from '../../core/util/data-util.service';
 import { IWithIdString } from '../../shared/model/with-id-string.model';
 import { WithIdStringService } from '../with-id-string/with-id-string.service';
 
@@ -17,6 +16,7 @@ import { WithIdStringService } from '../with-id-string/with-id-string.service';
   templateUrl: './with-id-string-details-update.component.html',
 })
 export class WithIdStringDetailsUpdateComponent implements OnInit {
+  edit = false;
   isSaving = false;
   withIdStringOptions: IWithIdString[] | null = null;
   withIdStringFilterValue?: any;
@@ -43,7 +43,7 @@ export class WithIdStringDetailsUpdateComponent implements OnInit {
   }
 
   onWithIdStringLazyLoadEvent(event: LazyLoadEvent): void {
-    this.withIdStringService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(
+    this.withIdStringService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<IWithIdString[]>) => (this.withIdStringOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -51,8 +51,10 @@ export class WithIdStringDetailsUpdateComponent implements OnInit {
 
   updateForm(withIdStringDetails: IWithIdStringDetails | null): void {
     if (withIdStringDetails) {
+      this.edit = true;
       this.editForm.reset({ ...withIdStringDetails });
     } else {
+      this.edit = false;
       this.editForm.reset({});
     }
   }
@@ -86,11 +88,6 @@ export class WithIdStringDetailsUpdateComponent implements OnInit {
   protected onSaveError(): void {
     this.isSaving = false;
   }
-
-  trackById(index: number, item: IWithIdString): string {
-    return item.id!;
-  }
-
   protected onError(errorMessage: string): void {
     this.messageService.add({ severity: 'error', summary: errorMessage });
   }

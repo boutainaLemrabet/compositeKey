@@ -36,6 +36,8 @@ public class EmployeeCriteria implements Serializable, Criteria {
 
     private EmployeeCriteria manager;
 
+    private String globalFilter;
+
     public EmployeeCriteria() {}
 
     public EmployeeCriteria(EmployeeCriteria other) {
@@ -45,6 +47,7 @@ public class EmployeeCriteria implements Serializable, Criteria {
         this.skill = other.skill == null ? null : other.skill.copy();
         this.taughtSkill = other.taughtSkill == null ? null : other.taughtSkill.copy();
         this.manager = other.manager == null ? null : other.manager.copy();
+        this.globalFilter = other.globalFilter;
     }
 
     @Override
@@ -100,6 +103,14 @@ public class EmployeeCriteria implements Serializable, Criteria {
         this.manager = manager;
     }
 
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -115,13 +126,14 @@ public class EmployeeCriteria implements Serializable, Criteria {
             Objects.equals(teamMember, that.teamMember) &&
             Objects.equals(skill, that.skill) &&
             Objects.equals(taughtSkill, that.taughtSkill) &&
-            Objects.equals(manager, that.manager)
+            Objects.equals(manager, that.manager) &&
+            Objects.equals(globalFilter, that.globalFilter)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(username, fullname, teamMember, skill, taughtSkill, manager);
+        return Objects.hash(username, fullname, teamMember, skill, taughtSkill, manager, globalFilter);
     }
 
     // prettier-ignore
@@ -134,6 +146,7 @@ public class EmployeeCriteria implements Serializable, Criteria {
             (skill != null ? "skill=" + skill + ", " : "") +
             (taughtSkill != null ? "taughtSkill=" + taughtSkill + ", " : "") +
             (manager != null ? "manager=" + manager + ", " : "") +
+            (globalFilter != null ? "globalFilter=" + globalFilter + ", " : "") +
             "}";
     }
 }

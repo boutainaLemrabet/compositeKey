@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { ICertificateType } from '../../shared/model/certificate-type.model';
 import { CertificateTypeService } from './certificate-type.service';
-import { DataUtils } from '../../core/util/data-util.service';
 
 @Component({
   selector: 'jhi-certificate-type-update',

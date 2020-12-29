@@ -33,6 +33,8 @@ public class EmployeeSkillCertificateCriteria implements Serializable, Criteria 
 
     private EmployeeSkillCriteria skill;
 
+    private String globalFilter;
+
     public EmployeeSkillCertificateCriteria() {}
 
     public EmployeeSkillCertificateCriteria(EmployeeSkillCertificateCriteria other) {
@@ -40,6 +42,7 @@ public class EmployeeSkillCertificateCriteria implements Serializable, Criteria 
         this.date = other.date == null ? null : other.date.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.skill = other.skill == null ? null : other.skill.copy();
+        this.globalFilter = other.globalFilter;
     }
 
     @Override
@@ -79,6 +82,14 @@ public class EmployeeSkillCertificateCriteria implements Serializable, Criteria 
         this.skill = skill;
     }
 
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -92,13 +103,14 @@ public class EmployeeSkillCertificateCriteria implements Serializable, Criteria 
             Objects.equals(grade, that.grade) &&
             Objects.equals(date, that.date) &&
             Objects.equals(type, that.type) &&
-            Objects.equals(skill, that.skill)
+            Objects.equals(skill, that.skill) &&
+            Objects.equals(globalFilter, that.globalFilter)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(grade, date, type, skill);
+        return Objects.hash(grade, date, type, skill, globalFilter);
     }
 
     // prettier-ignore
@@ -109,6 +121,7 @@ public class EmployeeSkillCertificateCriteria implements Serializable, Criteria 
             (date != null ? "date=" + date + ", " : "") +
             (type != null ? "type=" + type + ", " : "") +
             (skill != null ? "skill=" + skill + ", " : "") +
+            (globalFilter != null ? "globalFilter=" + globalFilter + ", " : "") +
             "}";
     }
 }

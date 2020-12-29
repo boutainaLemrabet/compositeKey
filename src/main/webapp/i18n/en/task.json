@@ -19,7 +19,12 @@
       },
       "id": "Id",
       "name": "Name",
-      "type": "Type",
+      "Type": "Type",
+      "TaskType": {
+        "TYPE1": "TYPE1",
+        "TYPE2": "TYPE2",
+        "TYPE3": "TYPE3"
+      },
       "endDate": "End Date",
       "createdAt": "Created At",
       "modifiedAt": "Modified At",
@@ -27,7 +32,7 @@
       "description": "Description",
       "attachment": "Attachment",
       "picture": "Picture",
-      "User": "User"
+      "user": "User"
     }
   }
 }

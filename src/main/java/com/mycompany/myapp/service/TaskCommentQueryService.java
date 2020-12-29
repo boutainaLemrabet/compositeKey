@@ -111,6 +111,18 @@ public class TaskCommentQueryService extends QueryService<TaskComment> {
                         }
                     );
             }
+
+            if (criteria.getGlobalFilter() != null) {
+                Specification<TaskComment> orSpecification = Specification.where(null);
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get(TaskComment_.value), "%" + criteria.getGlobalFilter() + "%")
+                        )
+                    );
+                specification = specification.and(orSpecification);
+            }
         }
         return specification;
     }

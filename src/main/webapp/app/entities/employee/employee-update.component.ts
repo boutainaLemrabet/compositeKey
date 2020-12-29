@@ -8,7 +8,6 @@ import { LazyLoadEvent } from 'primeng/api';
 import { IEmployee } from '../../shared/model/employee.model';
 import { EmployeeService } from './employee.service';
 import { MessageService } from 'primeng/api';
-import { DataUtils } from '../../core/util/data-util.service';
 
 @Component({
   selector: 'jhi-employee-update',
@@ -41,7 +40,7 @@ export class EmployeeUpdateComponent implements OnInit {
   }
 
   onManagerLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'username.contains')).subscribe(
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<IEmployee[]>) => (this.managerOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -86,10 +85,6 @@ export class EmployeeUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
-  }
-
-  trackByUsername(index: number, item: IEmployee): string {
-    return item.username!;
   }
 
   protected onError(errorMessage: string): void {

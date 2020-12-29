@@ -5,8 +5,6 @@ import { flatten, unflatten } from 'flat';
 import { Params } from '@angular/router';
 import { Table } from 'primeng/table';
 
-export const computeFilterMatchMode = (filterDetails: { matchMode?: string }): string => filterDetails.matchMode ?? 'contains';
-
 export const createRequestOption = (req?: any): HttpParams => {
   let options: HttpParams = new HttpParams();
 
@@ -32,15 +30,17 @@ export const lazyLoadEventToServerQueryParams = (event?: LazyLoadEvent, globalFi
   if (event) {
     if (event.filters) {
       for (const filterField of Object.keys(event.filters)) {
-        if (event.filters[filterField].matchMode === 'between') {
+        const matchMode = event.filters[filterField].matchMode;
+        if (matchMode === 'between') {
           if (event.filters[filterField].value[0]) {
-            params[filterField + '.greaterOrEqualThan'] = event.filters[filterField].value[0];
+            params[filterField + '.greaterThanOrEqual'] = event.filters[filterField].value[0];
           }
           if (event.filters[filterField].value[1]) {
-            params[filterField + '.lessOrEqualThan'] = event.filters[filterField].value[1];
+            params[filterField + '.lessThanOrEqual'] = event.filters[filterField].value[1];
           }
         } else {
-          params[`${filterField}.${event.filters[filterField].matchMode!}`] = event.filters[filterField].value;
+          // make params[`${filterField}${matchMode?`.${matchMode}`:''}`] readable
+          params[`${filterField}${matchMode ? `.${matchMode}` : ''}`] = event.filters[filterField].value;
         }
       }
     }
@@ -68,12 +68,11 @@ export const fillTableFromQueryParams = (
   table.multiSortMeta = (params['msm'] || []).map((sm: any) => ({ field: sm.field, order: +sm.order }));
   const filters: { [index: string]: any } = {};
   if (params['f']) {
-    Object.entries(params['f']).forEach(
+    Object.entries(flatten(params['f'], { safe: true })).forEach(
       ([field, value]) =>
         (filters[field] = {
-          value: filtersDetails[field].unflatten!(value) || value,
-          // value: (filtersDetails[field] && filtersDetails[field].unflatten && filtersDetails[field].unflatten!(value)) || value,
-          matchMode: computeFilterMatchMode(filtersDetails[field]),
+          value: (filtersDetails[field].unflatten && filtersDetails[field].unflatten!(value)) || value,
+          matchMode: filtersDetails[field].matchMode,
         })
     );
   }
@@ -83,7 +82,6 @@ export const fillTableFromQueryParams = (
 export const lazyLoadEventToRouterQueryParams = (
   event: LazyLoadEvent,
   filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: any) => any } }
-  // filtersDetails: { [_: string]: { matchMode?: string; flatten?: Function } }
 ): Params => {
   const queryParams: { [_: string]: any } = {};
   if (event.first) {

@@ -61,6 +61,8 @@ public class TaskCriteria implements Serializable, Criteria {
 
     private EmployeeSkillCriteria employeeSkill;
 
+    private String globalFilter;
+
     public TaskCriteria() {}
 
     public TaskCriteria(TaskCriteria other) {
@@ -72,6 +74,7 @@ public class TaskCriteria implements Serializable, Criteria {
         this.modifiedAt = other.modifiedAt == null ? null : other.modifiedAt.copy();
         this.done = other.done == null ? null : other.done.copy();
         this.employeeSkill = other.employeeSkill == null ? null : other.employeeSkill.copy();
+        this.globalFilter = other.globalFilter;
     }
 
     @Override
@@ -143,6 +146,14 @@ public class TaskCriteria implements Serializable, Criteria {
         this.employeeSkill = employeeSkill;
     }
 
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -160,13 +171,14 @@ public class TaskCriteria implements Serializable, Criteria {
             Objects.equals(createdAt, that.createdAt) &&
             Objects.equals(modifiedAt, that.modifiedAt) &&
             Objects.equals(done, that.done) &&
-            Objects.equals(employeeSkill, that.employeeSkill)
+            Objects.equals(employeeSkill, that.employeeSkill) &&
+            Objects.equals(globalFilter, that.globalFilter)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, type, endDate, createdAt, modifiedAt, done, employeeSkill);
+        return Objects.hash(id, name, type, endDate, createdAt, modifiedAt, done, employeeSkill, globalFilter);
     }
 
     // prettier-ignore
@@ -181,6 +193,7 @@ public class TaskCriteria implements Serializable, Criteria {
             (modifiedAt != null ? "modifiedAt=" + modifiedAt + ", " : "") +
             (done != null ? "done=" + done + ", " : "") +
             (employeeSkill != null ? "employeeSkill=" + employeeSkill + ", " : "") +
+            (globalFilter != null ? "globalFilter=" + globalFilter + ", " : "") +
             "}";
     }
 }

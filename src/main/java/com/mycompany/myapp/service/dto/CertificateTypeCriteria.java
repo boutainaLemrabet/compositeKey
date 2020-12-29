@@ -30,12 +30,15 @@ public class CertificateTypeCriteria implements Serializable, Criteria {
 
     private EmployeeSkillCertificateCriteria employeeSkillCertificate;
 
+    private String globalFilter;
+
     public CertificateTypeCriteria() {}
 
     public CertificateTypeCriteria(CertificateTypeCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.employeeSkillCertificate = other.employeeSkillCertificate == null ? null : other.employeeSkillCertificate.copy();
+        this.globalFilter = other.globalFilter;
     }
 
     @Override
@@ -59,6 +62,14 @@ public class CertificateTypeCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
+    }
+
     public EmployeeSkillCertificateCriteria getEmployeeSkillCertificate() {
         return employeeSkillCertificate;
     }
@@ -79,13 +90,14 @@ public class CertificateTypeCriteria implements Serializable, Criteria {
         return (
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
-            Objects.equals(employeeSkillCertificate, that.employeeSkillCertificate)
+            Objects.equals(employeeSkillCertificate, that.employeeSkillCertificate) &&
+            Objects.equals(globalFilter, that.globalFilter)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, employeeSkillCertificate);
+        return Objects.hash(id, name, employeeSkillCertificate, globalFilter);
     }
 
     // prettier-ignore
@@ -95,6 +107,7 @@ public class CertificateTypeCriteria implements Serializable, Criteria {
             (id != null ? "id=" + id + ", " : "") +
             (name != null ? "name=" + name + ", " : "") +
             (employeeSkillCertificate != null ? "employeeSkillCertificate=" + employeeSkillCertificate + ", " : "") +
+            (globalFilter != null ? "globalFilter=" + globalFilter + ", " : "") +
             "}";
     }
 }

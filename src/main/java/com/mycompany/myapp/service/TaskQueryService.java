@@ -17,6 +17,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.service.QueryService;
+import tech.jhipster.service.filter.Filter;
+import tech.jhipster.service.filter.RangeFilter;
+import tech.jhipster.service.filter.StringFilter;
 
 /**
  * Service for executing complex queries for {@link Task} entities in the database.
@@ -126,6 +129,18 @@ public class TaskQueryService extends QueryService<Task> {
                             );
                         }
                     );
+            }
+
+            if (criteria.getGlobalFilter() != null) {
+                Specification<Task> orSpecification = Specification.where(null);
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(root.get(Task_.name), "%" + criteria.getGlobalFilter() + "%")
+                        )
+                    );
+                specification = specification.and(orSpecification);
             }
         }
         return specification;

@@ -7,7 +7,6 @@ import { JhiEventManager } from 'ng-jhipster';
 import { ConfirmationService, LazyLoadEvent, MessageService } from 'primeng/api';
 import { ITEMS_PER_PAGE } from '../../core/config/pagination.constants';
 import {
-  computeFilterMatchMode,
   lazyLoadEventToServerQueryParams,
   lazyLoadEventToRouterQueryParams,
   fillTableFromQueryParams,
@@ -87,7 +86,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.userTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.userTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(login: string): void {

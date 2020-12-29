@@ -36,6 +36,8 @@ public class EmployeeSkillCriteria implements Serializable, Criteria {
 
     private EmployeeCriteria teacher;
 
+    private String globalFilter;
+
     public EmployeeSkillCriteria() {}
 
     public EmployeeSkillCriteria(EmployeeSkillCriteria other) {
@@ -45,6 +47,7 @@ public class EmployeeSkillCriteria implements Serializable, Criteria {
         this.task = other.task == null ? null : other.task.copy();
         this.employee = other.employee == null ? null : other.employee.copy();
         this.teacher = other.teacher == null ? null : other.teacher.copy();
+        this.globalFilter = other.globalFilter;
     }
 
     @Override
@@ -100,6 +103,14 @@ public class EmployeeSkillCriteria implements Serializable, Criteria {
         this.teacher = teacher;
     }
 
+    public String getGlobalFilter() {
+        return globalFilter;
+    }
+
+    public void setGlobalFilter(String globalFilter) {
+        this.globalFilter = globalFilter;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -115,7 +126,8 @@ public class EmployeeSkillCriteria implements Serializable, Criteria {
             Objects.equals(employeeSkillCertificate, that.employeeSkillCertificate) &&
             Objects.equals(task, that.task) &&
             Objects.equals(employee, that.employee) &&
-            Objects.equals(teacher, that.teacher)
+            Objects.equals(teacher, that.teacher) &&
+            Objects.equals(globalFilter, that.globalFilter)
         );
     }
 
@@ -134,6 +146,7 @@ public class EmployeeSkillCriteria implements Serializable, Criteria {
             (task != null ? "task=" + task + ", " : "") +
             (employee != null ? "employee=" + employee + ", " : "") +
             (teacher != null ? "teacher=" + teacher + ", " : "") +
+            (globalFilter != null ? "globalFilter=" + globalFilter + ", " : "") +
             "}";
     }
 }

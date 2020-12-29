@@ -10,7 +10,6 @@ import { TaskCommentService } from './task-comment.service';
 
 import { ITEMS_PER_PAGE } from '../../core/config/pagination.constants';
 import {
-  computeFilterMatchMode,
   lazyLoadEventToServerQueryParams,
   lazyLoadEventToRouterQueryParams,
   fillTableFromQueryParams,
@@ -37,7 +36,12 @@ export class TaskCommentComponent implements OnInit, OnDestroy {
 
   private filtersDetails: { [_: string]: { matchMode?: string; flatten?: (_: string[]) => string; unflatten?: (_: string) => any } } = {
     id: { matchMode: 'equals', unflatten: (x: string) => +x },
-    taskId: { matchMode: 'in' },
+    value: { matchMode: 'contains' },
+    ['task.id']: {
+      matchMode: 'in',
+      flatten: a => a.filter((x: string) => `${x}`).join(','),
+      unflatten: (a: string) => a.split(',').map(x => +x),
+    },
   };
 
   @ViewChild('taskCommentTable', { static: true })
@@ -89,13 +93,13 @@ export class TaskCommentComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.taskCommentTable.filter(value, field, computeFilterMatchMode(this.filtersDetails[field]));
+    this.taskCommentTable.filter(value, field, this.filtersDetails[field].matchMode);
   }
 
   delete(id: number): void {
     this.confirmationService.confirm({
       header: this.translateService.instant('entity.delete.title'),
-      message: this.translateService.instant('primengtestApp.taskComment.delete.question', { id: id }),
+      message: this.translateService.instant('compositekeyApp.taskComment.delete.question', { id }),
       accept: () => {
         this.taskCommentService.delete(id).subscribe(() => {
           this.eventManager.broadcast({
@@ -108,7 +112,7 @@ export class TaskCommentComponent implements OnInit, OnDestroy {
   }
 
   onTaskLazyLoadEvent(event: LazyLoadEvent): void {
-    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(res => (this.taskOptions = res.body));
+    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(res => (this.taskOptions = res.body));
   }
 
   trackId(index: number, item: ITaskComment): number {

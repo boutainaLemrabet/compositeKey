@@ -130,6 +130,41 @@ public class EmployeeSkillCertificateQueryService extends QueryService<EmployeeS
                         }
                     );
             }
+
+            if (criteria.getGlobalFilter() != null) {
+                Specification<EmployeeSkillCertificate> orSpecification = Specification.where(null);
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(
+                                    root.get(EmployeeSkillCertificate_.id).get(EmployeeSkillCertificateId_.skillName),
+                                    "%" + criteria.getGlobalFilter() + "%"
+                                )
+                        )
+                    );
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(
+                                    root.get(EmployeeSkillCertificate_.id).get(EmployeeSkillCertificateId_.skillEmployeeUsername),
+                                    "%" + criteria.getGlobalFilter() + "%"
+                                )
+                        )
+                    );
+                orSpecification =
+                    orSpecification.or(
+                        (
+                            (root, criteriaQuery, criteriaBuilder) ->
+                                criteriaBuilder.like(
+                                    root.get(EmployeeSkillCertificate_.skill).get(EmployeeSkill_.name),
+                                    "%" + criteria.getGlobalFilter() + "%"
+                                )
+                        )
+                    );
+                specification = specification.and(orSpecification);
+            }
         }
         return specification;
     }

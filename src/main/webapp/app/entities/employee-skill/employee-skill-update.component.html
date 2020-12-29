@@ -6,7 +6,7 @@
                 <div class="p-field p-grid">
                     <label jhiTranslate="compositekeyApp.employeeSkill.name" for="field_name" class="p-col-12 p-md-2">Name</label>
                     <div class="p-col-12 p-md-10">
-                        <input pInputText type="text" name="name" id="field_name" formControlName="name"/>
+                        <input pInputText type="text" name="name" id="field_name" formControlName="name" [readonly]="edit"/>
                         <div class="validation-messages">
                             <ng-container *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
                                 <p-message severity="error"
@@ -46,7 +46,7 @@
                         <div class="p-col-12 p-md-10">
                                 <p-dropdown id="field_employee" name="employee" [options]="employeeOptions!" formControlName="employee" [readonly]="edit"
                                             [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onEmployeeLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="employeeFilterValue"
-                                            placeholder="Choose" optionLabel="fullname" optionValue="username"></p-dropdown>
+                                            placeholder="Choose" optionLabel="fullname"></p-dropdown>
                                 <div class="validation-messages">
                                     <ng-container *ngIf="editForm.get('employee')!.invalid && (editForm.get('employee')!.dirty || editForm.get('employee')!.touched)">
                                         <p-message severity="error"
@@ -61,7 +61,7 @@
                         <div class="p-col-12 p-md-10">
                                 <p-dropdown id="field_teacher" name="teacher" [options]="teacherOptions!" formControlName="teacher"
                                             [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onTeacherLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="teacherFilterValue"
-                                            placeholder="Choose" optionLabel="fullname" optionValue="username"></p-dropdown>
+                                            placeholder="Choose" optionLabel="fullname"></p-dropdown>
                                 <div class="validation-messages">
                                     <ng-container *ngIf="editForm.get('teacher')!.invalid && (editForm.get('teacher')!.dirty || editForm.get('teacher')!.touched)">
                                         <p-message severity="error"

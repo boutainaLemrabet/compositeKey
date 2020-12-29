@@ -6,7 +6,7 @@
                 <div class="p-field p-grid">
                     <label jhiTranslate="compositekeyApp.employee.username" for="field_username" class="p-col-12 p-md-2">Username</label>
                     <div class="p-col-12 p-md-10">
-                        <input pInputText type="text" name="username" id="field_username" formControlName="username"/>
+                        <input pInputText type="text" name="username" id="field_username" formControlName="username" [readonly]="edit"/>
                         <div class="validation-messages">
                             <ng-container *ngIf="editForm.get('username')!.invalid && (editForm.get('username')!.dirty || editForm.get('username')!.touched)">
                                 <p-message severity="error"
@@ -34,7 +34,7 @@
                         <div class="p-col-12 p-md-10">
                                 <p-dropdown id="field_manager" name="manager" [options]="managerOptions!" formControlName="manager"
                                             [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onManagerLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="managerFilterValue"
-                                            placeholder="Choose" optionLabel="fullname" optionValue="username" [showClear]="true"></p-dropdown>
+                                            placeholder="Choose" optionLabel="fullname" [showClear]="true"></p-dropdown>
                         </div>
                     </div>
             </div>

@@ -17,9 +17,9 @@
                     <span jhiTranslate="compositekeyApp.taskComment.value">Value</span>
                     <p-sortIcon field="value"></p-sortIcon>
                 </th>
-                <th pSortableColumn="Task">
-                    <span jhiTranslate="compositekeyApp.taskComment.Task">Task</span>
-                    <p-sortIcon field="Task"></p-sortIcon>
+                <th pSortableColumn="task">
+                    <span jhiTranslate="compositekeyApp.taskComment.task">Task</span>
+                    <p-sortIcon field="task"></p-sortIcon>
                 </th>
                 <th style="width: 124px"></th>
             </tr>
@@ -32,11 +32,11 @@
                     <input pInputText type="text" [ngModel]="taskCommentTable.filters.value?.value"
                            (ngModelChange)="filter($event, 'value')">
                 </th>
-                <th>
-                    <p-multiSelect [options]="taskOptions!" [ngModel]="taskCommentTable.filters.taskId?.value" optionLabel="" optionValue="id"
-                                   [lazy]="true" [rows]="10" (onLazyLoad)="onTaskLazyLoadEvent($event)"
-                                   (ngModelChange)="filter($event, 'taskId')"></p-multiSelect>
-                </th>
+                    <th>
+                        <p-multiSelect [options]="taskOptions!" [ngModel]="taskCommentTable.filters['task.id']?.value" optionLabel="name" optionValue="id"
+                                       [lazy]="true" [rows]="10" (onLazyLoad)="onTaskLazyLoadEvent($event)"
+                                       (ngModelChange)="filter($event, 'task.id')"></p-multiSelect>
+                    </th>
                 <th></th>
             </tr>
         </ng-template>

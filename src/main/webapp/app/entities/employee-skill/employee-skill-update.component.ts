@@ -8,7 +8,6 @@ import { LazyLoadEvent } from 'primeng/api';
 import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 import { EmployeeSkillService } from './employee-skill.service';
 import { MessageService } from 'primeng/api';
-import { DataUtils } from '../../core/util/data-util.service';
 import { ITask } from '../../shared/model/task.model';
 import { TaskService } from '../task/task.service';
 import { IEmployee } from '../../shared/model/employee.model';
@@ -52,21 +51,21 @@ export class EmployeeSkillUpdateComponent implements OnInit {
   }
 
   onTaskLazyLoadEvent(event: LazyLoadEvent): void {
-    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'id.contains')).subscribe(
+    this.taskService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<ITask[]>) => (this.taskOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
 
   onEmployeeLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'username.contains')).subscribe(
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<IEmployee[]>) => (this.employeeOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
 
   onTeacherLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'username.contains')).subscribe(
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<IEmployee[]>) => (this.teacherOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -112,14 +111,6 @@ export class EmployeeSkillUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
-  }
-
-  trackById(index: number, item: ITask): number {
-    return item.id!;
-  }
-
-  trackByUsername(index: number, item: IEmployee): string {
-    return item.username!;
   }
 
   protected onError(errorMessage: string): void {

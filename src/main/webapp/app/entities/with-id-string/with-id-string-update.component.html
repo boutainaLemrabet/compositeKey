@@ -6,7 +6,7 @@
                 <div class="p-field p-grid">
                     <label jhiTranslate="compositekeyApp.withIdString.id" for="field_id" class="p-col-12 p-md-2">Id</label>
                     <div class="p-col-12 p-md-10">
-                        <input pInputText type="text" name="id" id="field_id" formControlName="id"/>
+                        <input pInputText type="text" name="id" id="field_id" formControlName="id" [readonly]="edit"/>
                         <div class="validation-messages">
                             <ng-container *ngIf="editForm.get('id')!.invalid && (editForm.get('id')!.dirty || editForm.get('id')!.touched)">
                                 <p-message severity="error"

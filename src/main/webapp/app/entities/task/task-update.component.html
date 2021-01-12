@@ -135,9 +135,9 @@
                     <div class="p-field p-grid">
                         <label jhiTranslate="compositekeyApp.task.user" for="field_user" class="p-col-12 p-md-2">User</label>
                         <div class="p-col-12 p-md-10">
-                                <p-dropdown id="field_user" name="user" [options]="userOptions!" formControlName="user"
-                                            [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onUserLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true"
-                                            placeholder="Choose" optionLabel="login"></p-dropdown>
+                            <p-dropdown id="field_user" name="user" [options]="userOptions!" formControlName="user"
+                                        [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onUserLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true"
+                                        placeholder="Choose" optionLabel="login"></p-dropdown>
                                 <div class="validation-messages">
                                     <ng-container *ngIf="editForm.get('user')!.invalid && (editForm.get('user')!.dirty || editForm.get('user')!.touched)">
                                         <p-message severity="error"

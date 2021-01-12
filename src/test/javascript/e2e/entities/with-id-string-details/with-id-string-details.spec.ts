@@ -42,7 +42,7 @@ describe('WithIdStringDetails e2e test', () => {
         await withIdStringDetailsComponentsPage.clickOnCreateButton();
 
         await withIdStringDetailsUpdatePage.setNameInput('name');
-            withIdStringDetailsUpdatePage.withIdStringSelectLastOption(),
+            withIdStringDetailsUpdatePage.withIdStringSelectLastOption();
 
         expect(await withIdStringDetailsUpdatePage.getNameInput()).to.eq('name', 'Expected Name value to be equals to name');
 

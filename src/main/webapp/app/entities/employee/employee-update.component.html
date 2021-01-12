@@ -32,9 +32,9 @@
                     <div class="p-field p-grid">
                         <label jhiTranslate="compositekeyApp.employee.manager" for="field_manager" class="p-col-12 p-md-2">Employee</label>
                         <div class="p-col-12 p-md-10">
-                                <p-dropdown id="field_manager" name="manager" [options]="managerOptions!" formControlName="manager"
-                                            [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onManagerLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="managerFilterValue"
-                                            placeholder="Choose" optionLabel="fullname" [showClear]="true"></p-dropdown>
+                            <p-dropdown id="field_manager" name="manager" [options]="managerOptions!" formControlName="manager"
+                                        [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onManagerLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="managerFilterValue"
+                                        placeholder="Choose" optionLabel="fullname" [showClear]="true"></p-dropdown>
                         </div>
                     </div>
             </div>

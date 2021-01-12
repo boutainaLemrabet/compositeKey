@@ -50,7 +50,7 @@ export class EmployeeUpdateComponent implements OnInit {
     if (employee) {
       this.edit = true;
       this.editForm.reset({ ...employee });
-      this.managerFilterValue = employee.manager!.username!;
+      this.managerFilterValue = employee.manager?.username;
     } else {
       this.edit = false;
       this.editForm.reset({});

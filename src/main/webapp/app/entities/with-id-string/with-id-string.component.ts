@@ -36,6 +36,7 @@ export class WithIdStringComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadAll();
+    this.registerChangeInWithIdStrings();
   }
 
   ngOnDestroy(): void {
@@ -80,6 +81,10 @@ export class WithIdStringComponent implements OnInit, OnDestroy {
 
   trackId(index: number, item: IWithIdString): string {
     return item.id!;
+  }
+
+  registerChangeInWithIdStrings(): void {
+    this.eventSubscriber = this.eventManager.subscribe('withIdStringListModification', () => this.loadAll());
   }
 
   protected onError(errorMessage: string): void {

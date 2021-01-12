@@ -88,6 +88,7 @@ export class WithIdStringDetailsUpdateComponent implements OnInit {
   protected onSaveError(): void {
     this.isSaving = false;
   }
+
   protected onError(errorMessage: string): void {
     this.messageService.add({ severity: 'error', summary: errorMessage });
   }

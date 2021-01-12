@@ -75,6 +75,7 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.registerChangeInEmployeeSkillCertificates();
     this.activatedRoute.queryParams
       .pipe(
         tap(queryParams => fillTableFromQueryParams(this.employeeSkillCertificateTable, queryParams, this.filtersDetails)),
@@ -145,6 +146,12 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
 
   trackId(index: number, item: IEmployeeSkillCertificate): string {
     return `${item.type!.id!},${item.skill!.name!},${item.skill!.employee!.username!}`;
+  }
+
+  registerChangeInEmployeeSkillCertificates(): void {
+    this.eventSubscriber = this.eventManager.subscribe('employeeSkillCertificateListModification', () =>
+      this.router.navigate(['/employee-skill-certificate'], { queryParams: { r: Date.now() } })
+    );
   }
 
   protected paginateEmployeeSkillCertificates(data: IEmployeeSkillCertificate[], headers: HttpHeaders): void {

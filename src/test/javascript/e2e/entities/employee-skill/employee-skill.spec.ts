@@ -41,11 +41,13 @@ describe('EmployeeSkill e2e test', () => {
 
         await employeeSkillComponentsPage.clickOnCreateButton();
 
+        await employeeSkillUpdatePage.setNameInput('name');
         await employeeSkillUpdatePage.setLevelInput('9999999');
-            // employeeSkillUpdatePage.taskSelectLastOption(),
-            employeeSkillUpdatePage.employeeSelectLastOption(),
-            employeeSkillUpdatePage.teacherSelectLastOption(),
+            // employeeSkillUpdatePage.taskSelectLastOption();
+            employeeSkillUpdatePage.employeeSelectLastOption();
+            employeeSkillUpdatePage.teacherSelectLastOption();
 
+        expect(await employeeSkillUpdatePage.getNameInput()).to.eq('name', 'Expected Name value to be equals to name');
         expect(await employeeSkillUpdatePage.getLevelInput()).to.eq('9999999', 'Expected level value to be equals to 9999999');
 
         await employeeSkillUpdatePage.save();

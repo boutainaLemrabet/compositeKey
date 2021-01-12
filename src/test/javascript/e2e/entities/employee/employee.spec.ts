@@ -37,9 +37,12 @@ describe('Employee e2e test', () => {
 
     await employeeComponentsPage.clickOnCreateButton();
 
+    await employeeUpdatePage.setUsernameInput('username');
     await employeeUpdatePage.setFullnameInput('fullname');
-    employeeUpdatePage.managerSelectLastOption(),
-      expect(await employeeUpdatePage.getFullnameInput()).to.eq('fullname', 'Expected Fullname value to be equals to fullname');
+    employeeUpdatePage.managerSelectLastOption();
+
+    expect(await employeeUpdatePage.getUsernameInput()).to.eq('username', 'Expected Username value to be equals to username');
+    expect(await employeeUpdatePage.getFullnameInput()).to.eq('fullname', 'Expected Fullname value to be equals to fullname');
 
     await employeeUpdatePage.save();
     expect(await employeeUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;

@@ -1,43 +1,55 @@
+jest.mock('@angular/router');
+jest.mock('primeng/api');
+jest.mock('@ngx-translate/core');
+
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { of, BehaviorSubject } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ConfirmationService, MessageService, Confirmation } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
-import { compositekeyAppTestModule } from '../../../test.module';
+import { TranslateService } from '@ngx-translate/core';
+import { Table } from 'primeng/table';
+import { DatePipe } from '@angular/common';
+
 import { TaskCommentComponent } from 'app/entities/task-comment/task-comment.component';
 import { TaskCommentService } from 'app/entities/task-comment/task-comment.service';
-import { TaskComment } from 'app/shared/model/task-comment.model';
-import { ConfirmationService } from 'primeng/api';
-
-import { MockActivatedRoute } from '../../../helpers/mock-route.service';
-import { MockTable } from '../../../helpers/mock-table';
-import { JhiEventManager } from 'ng-jhipster';
 
 describe('Component Tests', () => {
   describe('TaskComment Management Component', () => {
     let comp: TaskCommentComponent;
     let fixture: ComponentFixture<TaskCommentComponent>;
     let service: TaskCommentService;
-    let mockConfirmationService: any;
+    let confirmationService: ConfirmationService;
 
-    let activatedRoute: MockActivatedRoute;
-    let mockEventManager: any;
+    let activatedRoute: ActivatedRoute;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
         declarations: [TaskCommentComponent],
+        providers: [
+          DatePipe,
+          ConfirmationService,
+          MessageService,
+          TranslateService,
+          Router,
+          {
+            provide: ActivatedRoute,
+            useValue: { data: of(), queryParams: new BehaviorSubject({}) },
+          },
+        ],
       })
         .overrideTemplate(TaskCommentComponent, '')
         .compileComponents();
 
       fixture = TestBed.createComponent(TaskCommentComponent);
       comp = fixture.componentInstance;
-      comp.taskCommentTable = new MockTable() as any;
       service = TestBed.inject(TaskCommentService);
-      mockConfirmationService = fixture.debugElement.injector.get(ConfirmationService);
+      confirmationService = fixture.debugElement.injector.get(ConfirmationService);
       activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-      mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
+
+      comp.taskCommentTable = { createLazyLoadMetadata: () => undefined } as Table;
     });
 
     it('Should call load all on init', fakeAsync(() => {
@@ -81,14 +93,18 @@ describe('Component Tests', () => {
     it('should call delete service using confirmDialog', fakeAsync(() => {
       // GIVEN
       spyOn(service, 'delete').and.returnValue(of({}));
+      spyOn(confirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          confirmation.accept();
+        }
+      });
 
       // WHEN
       comp.delete(123);
 
       // THEN
-      expect(mockConfirmationService.confirmSpy).toHaveBeenCalled();
+      expect(confirmationService.confirm).toHaveBeenCalled();
       expect(service.delete).toHaveBeenCalledWith(123);
-      expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
     }));
   });
 });

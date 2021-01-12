@@ -5,6 +5,7 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 
 import { CertificateTypeUpdateComponent } from 'app/entities/certificate-type/certificate-type-update.component';
@@ -20,7 +21,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
         declarations: [CertificateTypeUpdateComponent],
-        providers: [FormBuilder, ActivatedRoute],
+        providers: [FormBuilder, ActivatedRoute, MessageService],
       })
         .overrideTemplate(CertificateTypeUpdateComponent, '')
         .compileComponents();

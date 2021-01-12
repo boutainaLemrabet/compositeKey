@@ -60,6 +60,7 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.registerChangeInEmployeeSkills();
     this.activatedRoute.queryParams
       .pipe(
         tap(queryParams => fillTableFromQueryParams(this.employeeSkillTable, queryParams, this.filtersDetails)),
@@ -121,6 +122,12 @@ export class EmployeeSkillComponent implements OnInit, OnDestroy {
 
   trackId(index: number, item: IEmployeeSkill): string {
     return `${item.name!},${item.employee!.username!}`;
+  }
+
+  registerChangeInEmployeeSkills(): void {
+    this.eventSubscriber = this.eventManager.subscribe('employeeSkillListModification', () =>
+      this.router.navigate(['/employee-skill'], { queryParams: { r: Date.now() } })
+    );
   }
 
   protected paginateEmployeeSkills(data: IEmployeeSkill[], headers: HttpHeaders): void {

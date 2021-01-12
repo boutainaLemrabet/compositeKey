@@ -5,7 +5,9 @@ import { HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { of } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 import { TaskCommentUpdateComponent } from 'app/entities/task-comment/task-comment-update.component';
 import { TaskCommentService } from 'app/entities/task-comment/task-comment.service';
@@ -20,7 +22,7 @@ describe('Component Tests', () => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
         declarations: [TaskCommentUpdateComponent],
-        providers: [FormBuilder, ActivatedRoute],
+        providers: [FormBuilder, ActivatedRoute, MessageService, DatePipe],
       })
         .overrideTemplate(TaskCommentUpdateComponent, '')
         .compileComponents();

@@ -37,6 +37,7 @@ export class CertificateTypeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadAll();
+    this.registerChangeInCertificateTypes();
   }
 
   ngOnDestroy(): void {
@@ -81,6 +82,10 @@ export class CertificateTypeComponent implements OnInit, OnDestroy {
 
   trackId(index: number, item: ICertificateType): number {
     return item.id!;
+  }
+
+  registerChangeInCertificateTypes(): void {
+    this.eventSubscriber = this.eventManager.subscribe('certificateTypeListModification', () => this.loadAll());
   }
 
   protected onError(errorMessage: string): void {

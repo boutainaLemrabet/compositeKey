@@ -75,8 +75,8 @@ export class EmployeeSkillUpdateComponent implements OnInit {
     if (employeeSkill) {
       this.edit = true;
       this.editForm.reset({ ...employeeSkill });
-      this.employeeFilterValue = employeeSkill.employee!.username!;
-      this.teacherFilterValue = employeeSkill.teacher!.username!;
+      this.employeeFilterValue = employeeSkill.employee?.username;
+      this.teacherFilterValue = employeeSkill.teacher?.username;
     } else {
       this.edit = false;
       this.editForm.reset({});

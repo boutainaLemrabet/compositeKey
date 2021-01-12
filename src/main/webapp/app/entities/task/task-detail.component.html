@@ -52,7 +52,7 @@
                 <dt><span jhiTranslate="compositekeyApp.task.user">User</span></dt>
                 <dd>
                     <div *ngIf="task.user">
-                        [routerLink]="['/user', task!.user!.id!, 'view']">{{ task!.user!.login }}
+                        {{ task!.user!.login }}
                     </div>
                 </dd>
             </dl>

@@ -45,8 +45,8 @@ describe('EmployeeSkillCertificate e2e test', () => {
 
         await employeeSkillCertificateUpdatePage.setGradeInput('9999999');
         await employeeSkillCertificateUpdatePage.setDateInput('12/31/2000');
-            employeeSkillCertificateUpdatePage.typeSelectLastOption(),
-            employeeSkillCertificateUpdatePage.skillSelectLastOption(),
+            employeeSkillCertificateUpdatePage.typeSelectLastOption();
+            employeeSkillCertificateUpdatePage.skillSelectLastOption();
 
         expect(await employeeSkillCertificateUpdatePage.getGradeInput()).to.eq('9999999', 'Expected grade value to be equals to 9999999');
         expect(await employeeSkillCertificateUpdatePage.getDateInput()).to.eq('12/31/2000', 'Expected date value to be equals to 12/31/2000');

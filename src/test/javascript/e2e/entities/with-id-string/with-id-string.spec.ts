@@ -37,6 +37,10 @@ describe('WithIdString e2e test', () => {
 
     await withIdStringComponentsPage.clickOnCreateButton();
 
+    await withIdStringUpdatePage.setIdInput('id');
+
+    expect(await withIdStringUpdatePage.getIdInput()).to.eq('id', 'Expected Id value to be equals to id');
+
     await withIdStringUpdatePage.save();
     expect(await withIdStringUpdatePage.getSaveButton().isPresent(), 'Expected save button disappear').to.be.false;
 

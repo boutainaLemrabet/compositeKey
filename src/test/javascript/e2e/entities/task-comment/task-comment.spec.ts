@@ -42,7 +42,7 @@ describe('TaskComment e2e test', () => {
         await taskCommentComponentsPage.clickOnCreateButton();
 
         await taskCommentUpdatePage.setValueInput('value');
-            taskCommentUpdatePage.taskSelectLastOption(),
+            taskCommentUpdatePage.taskSelectLastOption();
 
         expect(await taskCommentUpdatePage.getValueInput()).to.eq('value', 'Expected Value value to be equals to value');
 

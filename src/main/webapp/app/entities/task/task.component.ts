@@ -57,6 +57,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadAll();
+    this.registerChangeInTasks();
   }
 
   ngOnDestroy(): void {
@@ -113,6 +114,10 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   openFile(contentType = '', field: string): void {
     return this.dataUtils.openFile(contentType, field);
+  }
+
+  registerChangeInTasks(): void {
+    this.eventSubscriber = this.eventManager.subscribe('taskListModification', () => this.loadAll());
   }
 
   protected onError(errorMessage: string): void {

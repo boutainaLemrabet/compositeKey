@@ -1,43 +1,53 @@
+jest.mock('@angular/router');
+jest.mock('primeng/api');
+jest.mock('@ngx-translate/core');
+
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { of, BehaviorSubject } from 'rxjs';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ConfirmationService, MessageService, Confirmation } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
-import { compositekeyAppTestModule } from '../../../test.module';
+import { TranslateService } from '@ngx-translate/core';
+import { Table } from 'primeng/table';
+
 import { EmployeeSkillComponent } from 'app/entities/employee-skill/employee-skill.component';
 import { EmployeeSkillService } from 'app/entities/employee-skill/employee-skill.service';
-import { EmployeeSkill } from 'app/shared/model/employee-skill.model';
-import { ConfirmationService } from 'primeng/api';
-
-import { MockActivatedRoute } from '../../../helpers/mock-route.service';
-import { MockTable } from '../../../helpers/mock-table';
-import { JhiEventManager } from 'ng-jhipster';
 
 describe('Component Tests', () => {
   describe('EmployeeSkill Management Component', () => {
     let comp: EmployeeSkillComponent;
     let fixture: ComponentFixture<EmployeeSkillComponent>;
     let service: EmployeeSkillService;
-    let mockConfirmationService: any;
+    let confirmationService: ConfirmationService;
 
-    let activatedRoute: MockActivatedRoute;
-    let mockEventManager: any;
+    let activatedRoute: ActivatedRoute;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
         imports: [HttpClientTestingModule],
         declarations: [EmployeeSkillComponent],
+        providers: [
+          ConfirmationService,
+          MessageService,
+          TranslateService,
+          Router,
+          {
+            provide: ActivatedRoute,
+            useValue: { data: of(), queryParams: new BehaviorSubject({}) },
+          },
+        ],
       })
         .overrideTemplate(EmployeeSkillComponent, '')
         .compileComponents();
 
       fixture = TestBed.createComponent(EmployeeSkillComponent);
       comp = fixture.componentInstance;
-      comp.employeeSkillTable = new MockTable() as any;
       service = TestBed.inject(EmployeeSkillService);
-      mockConfirmationService = fixture.debugElement.injector.get(ConfirmationService);
+      confirmationService = fixture.debugElement.injector.get(ConfirmationService);
       activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-      mockEventManager = fixture.debugElement.injector.get(JhiEventManager);
+
+      comp.employeeSkillTable = { createLazyLoadMetadata: () => undefined } as Table;
     });
 
     it('Should call load all on init', fakeAsync(() => {
@@ -81,14 +91,18 @@ describe('Component Tests', () => {
     it('should call delete service using confirmDialog', fakeAsync(() => {
       // GIVEN
       spyOn(service, 'delete').and.returnValue(of({}));
+      spyOn(confirmationService, 'confirm').and.callFake((confirmation: Confirmation) => {
+        if (confirmation.accept) {
+          confirmation.accept();
+        }
+      });
 
       // WHEN
       comp.delete('123', '123');
 
       // THEN
-      expect(mockConfirmationService.confirmSpy).toHaveBeenCalled();
+      expect(confirmationService.confirm).toHaveBeenCalled();
       expect(service.delete).toHaveBeenCalledWith('123', '123');
-      expect(mockEventManager.broadcastSpy).toHaveBeenCalled();
     }));
   });
 });

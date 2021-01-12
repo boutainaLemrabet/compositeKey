@@ -62,6 +62,7 @@ export class TaskCommentComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.registerChangeInTaskComments();
     this.activatedRoute.queryParams
       .pipe(
         tap(queryParams => fillTableFromQueryParams(this.taskCommentTable, queryParams, this.filtersDetails)),
@@ -117,6 +118,12 @@ export class TaskCommentComponent implements OnInit, OnDestroy {
 
   trackId(index: number, item: ITaskComment): number {
     return item.id!;
+  }
+
+  registerChangeInTaskComments(): void {
+    this.eventSubscriber = this.eventManager.subscribe('taskCommentListModification', () =>
+      this.router.navigate(['/task-comment'], { queryParams: { r: Date.now() } })
+    );
   }
 
   protected paginateTaskComments(data: ITaskComment[], headers: HttpHeaders): void {

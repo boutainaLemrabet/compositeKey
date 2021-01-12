@@ -55,6 +55,7 @@ export class EmployeeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.registerChangeInEmployees();
     this.activatedRoute.queryParams
       .pipe(
         tap(queryParams => fillTableFromQueryParams(this.employeeTable, queryParams, this.filtersDetails)),
@@ -110,6 +111,12 @@ export class EmployeeComponent implements OnInit, OnDestroy {
 
   trackId(index: number, item: IEmployee): string {
     return item.username!;
+  }
+
+  registerChangeInEmployees(): void {
+    this.eventSubscriber = this.eventManager.subscribe('employeeListModification', () =>
+      this.router.navigate(['/employee'], { queryParams: { r: Date.now() } })
+    );
   }
 
   protected paginateEmployees(data: IEmployee[], headers: HttpHeaders): void {

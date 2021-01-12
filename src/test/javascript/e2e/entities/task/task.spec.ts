@@ -55,7 +55,7 @@ describe('Task e2e test', () => {
         await taskUpdatePage.setDescriptionInput('description');
         await taskUpdatePage.setAttachmentInput(absolutePath);
         await taskUpdatePage.setPictureInput(absolutePath);
-            taskUpdatePage.userSelectLastOption(),
+            taskUpdatePage.userSelectLastOption();
 
         expect(await taskUpdatePage.getNameInput()).to.eq('name', 'Expected Name value to be equals to name');
         expect(await taskUpdatePage.getEndDateInput()).to.eq('12/31/2000', 'Expected endDate value to be equals to 12/31/2000');

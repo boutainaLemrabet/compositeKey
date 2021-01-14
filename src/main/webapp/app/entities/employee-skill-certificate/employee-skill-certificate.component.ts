@@ -139,9 +139,9 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
   }
 
   onSkillLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeSkillService
-      .query(lazyLoadEventToServerQueryParams(event, 'globalFilter'))
-      .subscribe(res => (this.skillOptions = res.body));
+    this.employeeSkillService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(res => {
+      this.skillOptions = res.body;
+    });
   }
 
   trackId(index: number, item: IEmployeeSkillCertificate): string {

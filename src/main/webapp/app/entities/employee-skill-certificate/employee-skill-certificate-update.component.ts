@@ -12,6 +12,8 @@ import { ICertificateType } from '../../shared/model/certificate-type.model';
 import { CertificateTypeService } from '../certificate-type/certificate-type.service';
 import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 import { EmployeeSkillService } from '../employee-skill/employee-skill.service';
+import { IEmployee } from 'app/shared/model/employee.model';
+import { EmployeeService } from '../employee/employee.service';
 
 @Component({
   selector: 'jhi-employee-skill-certificate-update',
@@ -22,13 +24,16 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
   isSaving = false;
   typeOptions: ICertificateType[] | null = null;
   skillOptions: IEmployeeSkill[] | null = null;
+  employeeOptions: IEmployee[] | null = null;
   skillFilterValue?: any;
+  employeeFilterValue?: any;
 
   editForm = this.fb.group({
     grade: [null, [Validators.required]],
     date: [null, [Validators.required]],
     type: [null, Validators.required],
     skill: [null, Validators.required],
+    employee: [null, Validators.required],
   });
 
   constructor(
@@ -36,6 +41,7 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
     protected employeeSkillCertificateService: EmployeeSkillCertificateService,
     protected certificateTypeService: CertificateTypeService,
     protected employeeSkillService: EmployeeSkillService,
+    protected employeeService: EmployeeService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -55,7 +61,32 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
   }
 
   onSkillLazyLoadEvent(event: LazyLoadEvent): void {
-    this.employeeSkillService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
+    this.employeeSkillService
+      .query({
+        ...lazyLoadEventToServerQueryParams(event, 'globalFilter'),
+        'employee.username.equals': this.editForm.value.employee.username,
+      })
+      .subscribe(
+        (res: HttpResponse<IEmployeeSkill[]>) => (this.skillOptions = res.body),
+        (res: HttpErrorResponse) => this.onError(res.message)
+      );
+  }
+
+  onEmployeeLazyLoadEvent(event: LazyLoadEvent): void {
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
+      (res: HttpResponse<IEmployee[]>) => (this.employeeOptions = res.body),
+      (res: HttpErrorResponse) => this.onError(res.message)
+    );
+  }
+
+  changeEmployee(employee: IEmployee): void {
+    this.editForm.reset({
+      grade: this.editForm.value.grade,
+      date: this.editForm.value.date,
+      type: this.editForm.value.type,
+      employee: this.editForm.value.employee,
+    });
+    this.employeeSkillService.query({ 'employee.username.equals': employee.username }).subscribe(
       (res: HttpResponse<IEmployeeSkill[]>) => (this.skillOptions = res.body),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
@@ -67,6 +98,7 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
       this.editForm.reset({ ...employeeSkillCertificate });
       this.skillFilterValue = employeeSkillCertificate.skill?.name;
       this.skillFilterValue = employeeSkillCertificate.skill?.employee?.username;
+      this.employeeFilterValue = employeeSkillCertificate.skill?.employee;
     } else {
       this.edit = false;
       this.editForm.reset({

@@ -29,7 +29,6 @@ describe('Component Tests', () => {
         imports: [HttpClientTestingModule],
         declarations: [TaskCommentComponent],
         providers: [
-          DatePipe,
           ConfirmationService,
           MessageService,
           TranslateService,
@@ -38,6 +37,7 @@ describe('Component Tests', () => {
             provide: ActivatedRoute,
             useValue: { data: of(), queryParams: new BehaviorSubject({}) },
           },
+          DatePipe,
         ],
       })
         .overrideTemplate(TaskCommentComponent, '')

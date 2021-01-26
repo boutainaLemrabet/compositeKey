@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
@@ -23,15 +23,27 @@ export class EmployeeSkillUpdateComponent implements OnInit {
   taskOptions: ITask[] | null = null;
   employeeOptions: IEmployee[] | null = null;
   employeeFilterValue?: any;
-  teacherOptions: IEmployee[] | null = null;
+  teacherOptions?: IEmployee[] = undefined;
   teacherFilterValue?: any;
 
-  editForm = this.fb.group({
+  /* editForm = this.fb.group({
     name: [null, [Validators.required]],
     level: [null, [Validators.required]],
     tasks: [],
     employee: [null, Validators.required],
     teacher: [null, Validators.required],
+  }); */
+
+  editForm = this.fb.group({
+    name: [null, [Validators.required]],
+    level: [null, [Validators.required]],
+    tasks: [],
+    employee: this.fb.group({
+      username: [null, [Validators.required]],
+    }),
+    teacher: this.fb.group({
+      username: [null, [Validators.required]],
+    }),
   });
 
   constructor(
@@ -50,6 +62,14 @@ export class EmployeeSkillUpdateComponent implements OnInit {
     });
   }
 
+  get employeeForm(): FormGroup {
+    return this.editForm.get('employee')! as FormGroup;
+  }
+
+  get teacherForm(): FormGroup {
+    return this.editForm.get('teacher')! as FormGroup;
+  }
+
   onTaskLazyLoadEvent(event: LazyLoadEvent): void {
     this.taskService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
       (res: HttpResponse<ITask[]>) => (this.taskOptions = res.body),
@@ -66,7 +86,7 @@ export class EmployeeSkillUpdateComponent implements OnInit {
 
   onTeacherLazyLoadEvent(event: LazyLoadEvent): void {
     this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
-      (res: HttpResponse<IEmployee[]>) => (this.teacherOptions = res.body),
+      (res: HttpResponse<IEmployee[]>) => (this.teacherOptions = res.body!),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }

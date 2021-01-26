@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, tap, switchMap } from 'rxjs/operators';
 import { JhiEventManager } from 'ng-jhipster';
-import { MessageService } from 'primeng/api';
+import { FilterMetadata, MessageService } from 'primeng/api';
 import { IEmployeeSkillCertificate } from '../../shared/model/employee-skill-certificate.model';
 import { EmployeeSkillCertificateService } from './employee-skill-certificate.service';
 
@@ -21,6 +21,8 @@ import { ICertificateType } from '../../shared/model/certificate-type.model';
 import { CertificateTypeService } from '../../entities/certificate-type/certificate-type.service';
 import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 import { EmployeeSkillService } from '../../entities/employee-skill/employee-skill.service';
+import { IEmployee } from 'app/shared/model/employee.model';
+import { EmployeeService } from 'app/entities/employee/employee.service';
 import { Table } from 'primeng/table';
 import { DatePipe } from '@angular/common';
 
@@ -33,6 +35,7 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
   eventSubscriber?: Subscription;
   dateRange?: Date[];
   typeOptions: ICertificateType[] | null = null;
+  employeeOptions: IEmployee[] | null = null;
   skillOptions: IEmployeeSkill[] | null = null;
 
   totalItems?: number;
@@ -48,6 +51,11 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
       unflatten: (a: string) => a.split(',').map(x => +x),
     },
     ['skill.name']: { matchMode: 'in', flatten: a => a.filter((x: string) => x).join(','), unflatten: (a: string) => a.split(',') },
+    ['skill.employee.username']: {
+      matchMode: 'in',
+      flatten: a => a.filter((x: string) => x).join(','),
+      unflatten: (a: string) => a.split(','),
+    },
     ['skill.employeeUsername']: {
       matchMode: 'in',
       flatten: a => a.filter((x: string) => x).join(','),
@@ -62,6 +70,7 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
     protected employeeSkillCertificateService: EmployeeSkillCertificateService,
     protected certificateTypeService: CertificateTypeService,
     protected employeeSkillService: EmployeeSkillService,
+    protected employeeService: EmployeeService,
     protected messageService: MessageService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
@@ -79,7 +88,7 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams
       .pipe(
         tap(queryParams => fillTableFromQueryParams(this.employeeSkillCertificateTable, queryParams, this.filtersDetails)),
-        tap(() => this.employeeSkillCertificateTable.filters.date?.value?.map((x: string) => new Date(x)) as Date[]),
+        tap(() => this.filters.date?.value?.map((x: string) => new Date(x)) as Date[]),
         tap(() => (this.loading = true)),
         switchMap(() =>
           this.employeeSkillCertificateService.query(
@@ -100,6 +109,10 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
       );
   }
 
+  get filters(): { [s: string]: FilterMetadata } {
+    return this.employeeSkillCertificateTable.filters as { [s: string]: FilterMetadata };
+  }
+
   ngOnDestroy(): void {
     if (this.eventSubscriber) {
       this.eventManager.destroy(this.eventSubscriber);
@@ -112,7 +125,7 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
   }
 
   filter(value: any, field: string): void {
-    this.employeeSkillCertificateTable.filter(value, field, this.filtersDetails[field].matchMode);
+    this.employeeSkillCertificateTable.filter(value, field, this.filtersDetails[field].matchMode!);
   }
 
   delete(typeId: number, skillName: string, skillEmployeeUsername: string): void {
@@ -136,6 +149,10 @@ export class EmployeeSkillCertificateComponent implements OnInit, OnDestroy {
     this.certificateTypeService
       .query(lazyLoadEventToServerQueryParams(event, 'globalFilter'))
       .subscribe(res => (this.typeOptions = res.body));
+  }
+
+  onEmployeeLazyLoadEvent(event: LazyLoadEvent): void {
+    this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(res => (this.employeeOptions = res.body));
   }
 
   onSkillLazyLoadEvent(event: LazyLoadEvent): void {

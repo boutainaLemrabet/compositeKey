@@ -19,10 +19,18 @@ export class EmployeeUpdateComponent implements OnInit {
   managerOptions: IEmployee[] | null = null;
   managerFilterValue?: any;
 
-  editForm = this.fb.group({
+  /* editForm = this.fb.group({
     username: [null, [Validators.required]],
     fullname: [null, [Validators.required]],
     manager: [],
+  }); */
+
+  editForm = this.fb.group({
+    username: [null, [Validators.required]],
+    fullname: [null, [Validators.required]],
+    manager: this.fb.group({
+      username: [null, [Validators.required]],
+    }),
   });
 
   constructor(

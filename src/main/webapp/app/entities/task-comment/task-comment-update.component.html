@@ -24,21 +24,23 @@
                         </div>
                     </div>
                 </div>
-                    <div class="p-field p-grid">
-                        <label jhiTranslate="compositekeyApp.taskComment.task" for="field_task" class="p-col-12 p-md-2">Task</label>
-                        <div class="p-col-12 p-md-10">
-                            <p-dropdown id="field_task" name="task" [options]="taskOptions!" formControlName="task"
-                                        [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onTaskLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true"
-                                        placeholder="Choose" optionLabel="name"></p-dropdown>
-                                <div class="validation-messages">
-                                    <ng-container *ngIf="editForm.get('task')!.invalid && (editForm.get('task')!.dirty || editForm.get('task')!.touched)">
-                                        <p-message severity="error"
-                                                   *ngIf="editForm.get('task')!.errors!.required" [text]="'entity.validation.required' | translate">
-                                        </p-message>
-                                    </ng-container>
-                                </div>
+                    <ng-container formGroupName="task">
+                        <div class="p-field p-grid">
+                            <label jhiTranslate="compositekeyApp.taskComment.task" for="field_task" class="p-col-12 p-md-2">Task</label>
+                            <div class="p-col-12 p-md-10">
+                                <p-dropdown id="field_task" name="id" [options]="taskOptions!" formControlName="id"
+                                            [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onTaskLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true"
+                                            placeholder="Choose" optionLabel="name" optionValue="id"></p-dropdown>
+                                    <div class="validation-messages">
+                                        <ng-container *ngIf="taskForm.get('id')!.invalid && (taskForm.get('id')!.dirty || taskForm.get('id')!.touched)">
+                                            <p-message severity="error"
+                                                       *ngIf="taskForm.get('id')!.errors!.required" [text]="'entity.validation.required' | translate">
+                                            </p-message>
+                                        </ng-container>
+                                    </div>
+                            </div>
                         </div>
-                    </div>
+                    </ng-container>
             </div>
 
 

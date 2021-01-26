@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
@@ -21,10 +21,18 @@ export class WithIdStringDetailsUpdateComponent implements OnInit {
   withIdStringOptions: IWithIdString[] | null = null;
   withIdStringFilterValue?: any;
 
+  // editForm = this.fb.group({
+  //   withIdStringId: [],
+  //   name: [],
+  //   withIdString: [],
+  // });
+
   editForm = this.fb.group({
     withIdStringId: [],
     name: [],
-    withIdString: [],
+    withIdString: this.fb.group({
+      id: [null, [Validators.required]],
+    }),
   });
 
   constructor(

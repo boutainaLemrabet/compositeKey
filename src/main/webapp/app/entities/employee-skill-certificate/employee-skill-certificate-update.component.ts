@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
 import { LazyLoadEvent } from 'primeng/api';
 import { IEmployeeSkillCertificate } from '../../shared/model/employee-skill-certificate.model';
@@ -14,26 +14,33 @@ import { IEmployeeSkill } from '../../shared/model/employee-skill.model';
 import { EmployeeSkillService } from '../employee-skill/employee-skill.service';
 import { IEmployee } from 'app/shared/model/employee.model';
 import { EmployeeService } from '../employee/employee.service';
+import { switchMap, takeUntil, filter, map, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-employee-skill-certificate-update',
   templateUrl: './employee-skill-certificate-update.component.html',
 })
-export class EmployeeSkillCertificateUpdateComponent implements OnInit {
+export class EmployeeSkillCertificateUpdateComponent implements OnInit, OnDestroy {
   edit = false;
   isSaving = false;
-  typeOptions: ICertificateType[] | null = null;
-  skillOptions: IEmployeeSkill[] | null = null;
-  employeeOptions: IEmployee[] | null = null;
-  skillFilterValue?: any;
-  employeeFilterValue?: any;
+  typeOptions?: ICertificateType[] = undefined;
+  skillOptions?: IEmployeeSkill[] = undefined;
+  employeeOptions?: IEmployee[] = undefined;
+
+  onDestroySubject = new Subject<void>();
 
   editForm = this.fb.group({
     grade: [null, [Validators.required]],
     date: [null, [Validators.required]],
-    type: [null, Validators.required],
-    skill: [null, Validators.required],
-    employee: [null, Validators.required],
+    type: this.fb.group({
+      id: [null, [Validators.required]],
+    }),
+    skill: this.fb.group({
+      name: [null, [Validators.required]],
+      employee: this.fb.group({
+        username: [null, [Validators.required]],
+      }),
+    }),
   });
 
   constructor(
@@ -47,15 +54,53 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isSaving = false;
+    this.employeeForm
+      .get('username')!
+      .valueChanges.pipe(
+        takeUntil(this.onDestroySubject),
+        filter(() => !this.edit), // because we always subscribe even if not edit
+        switchMap(username => {
+          if (!username) {
+            return of(undefined);
+          }
+          return this.employeeSkillService.query({ 'employee.username.equals': username }).pipe(
+            map((res: HttpResponse<IEmployeeSkill[]>) => res.body!),
+            catchError(err => {
+              this.onError(err.message);
+              return of(undefined);
+            })
+          );
+        })
+      )
+      .subscribe((skillOptions?: IEmployeeSkill[]) => {
+        this.skillOptions = skillOptions;
+        this.skillForm.get('name')!.reset();
+      });
     this.activatedRoute.data.subscribe(({ employeeSkillCertificate }) => {
       this.updateForm(employeeSkillCertificate);
     });
   }
 
+  get typeForm(): FormGroup {
+    return this.editForm.get('type')! as FormGroup;
+  }
+
+  get skillForm(): FormGroup {
+    return this.editForm.get('skill')! as FormGroup;
+  }
+
+  get employeeForm(): FormGroup {
+    return this.skillForm.get('employee')! as FormGroup;
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroySubject.next(undefined);
+    this.onDestroySubject.complete();
+  }
+
   onTypeLazyLoadEvent(event: LazyLoadEvent): void {
     this.certificateTypeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
-      (res: HttpResponse<ICertificateType[]>) => (this.typeOptions = res.body),
+      (res: HttpResponse<ICertificateType[]>) => (this.typeOptions = res.body!),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
@@ -64,30 +109,17 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
     this.employeeSkillService
       .query({
         ...lazyLoadEventToServerQueryParams(event, 'globalFilter'),
-        'employee.username.equals': this.editForm.value.employee.username,
+        'employee.username.equals': this.employeeForm.value.username,
       })
       .subscribe(
-        (res: HttpResponse<IEmployeeSkill[]>) => (this.skillOptions = res.body),
+        (res: HttpResponse<IEmployeeSkill[]>) => (this.skillOptions = res.body!),
         (res: HttpErrorResponse) => this.onError(res.message)
       );
   }
 
   onEmployeeLazyLoadEvent(event: LazyLoadEvent): void {
     this.employeeService.query(lazyLoadEventToServerQueryParams(event, 'globalFilter')).subscribe(
-      (res: HttpResponse<IEmployee[]>) => (this.employeeOptions = res.body),
-      (res: HttpErrorResponse) => this.onError(res.message)
-    );
-  }
-
-  changeEmployee(employee: IEmployee): void {
-    this.editForm.reset({
-      grade: this.editForm.value.grade,
-      date: this.editForm.value.date,
-      type: this.editForm.value.type,
-      employee: this.editForm.value.employee,
-    });
-    this.employeeSkillService.query({ 'employee.username.equals': employee.username }).subscribe(
-      (res: HttpResponse<IEmployeeSkill[]>) => (this.skillOptions = res.body),
+      (res: HttpResponse<IEmployee[]>) => (this.employeeOptions = res.body!),
       (res: HttpErrorResponse) => this.onError(res.message)
     );
   }
@@ -96,9 +128,9 @@ export class EmployeeSkillCertificateUpdateComponent implements OnInit {
     if (employeeSkillCertificate) {
       this.edit = true;
       this.editForm.reset({ ...employeeSkillCertificate });
-      this.skillFilterValue = employeeSkillCertificate.skill?.name;
-      this.skillFilterValue = employeeSkillCertificate.skill?.employee?.username;
-      this.employeeFilterValue = employeeSkillCertificate.skill?.employee;
+      this.typeOptions = [employeeSkillCertificate.type!];
+      this.employeeOptions = [employeeSkillCertificate.skill!.employee!];
+      this.skillOptions = [employeeSkillCertificate.skill!];
     } else {
       this.edit = false;
       this.editForm.reset({

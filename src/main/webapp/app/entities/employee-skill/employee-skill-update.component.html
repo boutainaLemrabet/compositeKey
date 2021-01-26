@@ -37,43 +37,45 @@
                         <div class="p-col-12 p-md-10">
                             <p-multiSelect id="field_tasks" name="tasks" formControlName="tasks"
                                            [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onTaskLazyLoadEvent($event)"
-                                           [options]="taskOptions!" optionLabel="name">
+                                           [options]="taskOptions!" optionLabel="name" dataKey="id">
                             </p-multiSelect>
                         </div>
                     </div>
-                    <div class="p-field p-grid">
-                        <label jhiTranslate="compositekeyApp.employeeSkill.employee" for="field_employee" class="p-col-12 p-md-2">Employee</label>
-                        <div class="p-col-12 p-md-10">
-                            <p-dropdown id="field_employee" name="employee" [options]="employeeOptions!" formControlName="employee" [readonly]="edit"
-                                        [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onEmployeeLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="employeeFilterValue"
-                                        placeholder="Choose" optionLabel="fullname"></p-dropdown>
-                                <div class="validation-messages">
-                                    <ng-container *ngIf="editForm.get('employee')!.invalid && (editForm.get('employee')!.dirty || editForm.get('employee')!.touched)">
-                                        <p-message severity="error"
-                                                   *ngIf="editForm.get('employee')!.errors!.required" [text]="'entity.validation.required' | translate">
-                                        </p-message>
-                                    </ng-container>
-                                </div>
+                    <ng-container formGroupName="employee">
+                        <div class="p-field p-grid">
+                            <label jhiTranslate="compositekeyApp.employeeSkill.employee" for="field_employee" class="p-col-12 p-md-2">Employee</label>
+                            <div class="p-col-12 p-md-10">
+                                <p-dropdown id="field_employee" name="username" [options]="employeeOptions!" formControlName="username" [readonly]="edit"
+                                            [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onEmployeeLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="employeeFilterValue"
+                                            placeholder="Choose" optionLabel="fullname" optionValue="username"></p-dropdown>
+                                    <div class="validation-messages">
+                                        <ng-container *ngIf="employeeForm.get('username')!.invalid && (employeeForm.get('username')!.dirty || employeeForm.get('username')!.touched)">
+                                            <p-message severity="error"
+                                                       *ngIf="employeeForm.get('username')!.errors!.required" [text]="'entity.validation.required' | translate">
+                                            </p-message>
+                                        </ng-container>
+                                    </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-field p-grid">
-                        <label jhiTranslate="compositekeyApp.employeeSkill.teacher" for="field_teacher" class="p-col-12 p-md-2">Employee</label>
-                        <div class="p-col-12 p-md-10">
-                            <p-dropdown id="field_teacher" name="teacher" [options]="teacherOptions!" formControlName="teacher"
-                                        [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onTeacherLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="teacherFilterValue"
-                                        placeholder="Choose" optionLabel="fullname"></p-dropdown>
-                                <div class="validation-messages">
-                                    <ng-container *ngIf="editForm.get('teacher')!.invalid && (editForm.get('teacher')!.dirty || editForm.get('teacher')!.touched)">
-                                        <p-message severity="error"
-                                                   *ngIf="editForm.get('teacher')!.errors!.required" [text]="'entity.validation.required' | translate">
-                                        </p-message>
-                                    </ng-container>
-                                </div>
+                    </ng-container>
+                    <ng-container formGroupName="teacher">
+                        <div class="p-field p-grid">
+                            <label jhiTranslate="compositekeyApp.employeeSkill.teacher" for="field_teacher" class="p-col-12 p-md-2">Employee</label>
+                            <div class="p-col-12 p-md-10">
+                                <p-dropdown id="field_teacher" name="username" [options]="teacherOptions!" formControlName="username"
+                                            [virtualScroll]="true" [lazy]="true" [rows]="10" (onLazyLoad)="onTeacherLazyLoadEvent($event)" [lazyLoadOnInit]="true" [filter]="true" [filterValue]="teacherFilterValue"
+                                            placeholder="Choose" optionLabel="fullname" optionValue="username"></p-dropdown>
+                                    <div class="validation-messages">
+                                        <ng-container *ngIf="teacherForm.get('username')!.invalid && (teacherForm.get('username')!.dirty || teacherForm.get('username')!.touched)">
+                                            <p-message severity="error"
+                                                       *ngIf="teacherForm.get('username')!.errors!.required" [text]="'entity.validation.required' | translate">
+                                            </p-message>
+                                        </ng-container>
+                                    </div>
+                            </div>
                         </div>
-                    </div>
+                    </ng-container>
             </div>
-
-
             <div>
                 <button pButton type="button" id="cancel-save" icon="pi pi-ban" class="ui-button-secondary" (click)="previousState()" [label]="'entity.action.cancel' | translate"></button>
                 <button pButton type="submit" id="save-entity" icon="pi pi-save" [disabled]="editForm.invalid || isSaving" [label]="'entity.action.save' | translate"></button>

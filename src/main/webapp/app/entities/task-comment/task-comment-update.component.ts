@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { lazyLoadEventToServerQueryParams } from '../../core/request/request-util';
@@ -19,10 +19,18 @@ export class TaskCommentUpdateComponent implements OnInit {
   isSaving = false;
   taskOptions: ITask[] | null = null;
 
-  editForm = this.fb.group({
+  /* editForm = this.fb.group({
     id: [],
     value: [null, [Validators.required]],
     task: [null, Validators.required],
+  }); */
+
+  editForm = this.fb.group({
+    id: [],
+    value: [null, [Validators.required]],
+    task: this.fb.group({
+      id: [null, [Validators.required]],
+    }),
   });
 
   constructor(
@@ -38,6 +46,10 @@ export class TaskCommentUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ taskComment }) => {
       this.updateForm(taskComment);
     });
+  }
+
+  get taskForm(): FormGroup {
+    return this.editForm.get('task') as FormGroup;
   }
 
   onTaskLazyLoadEvent(event: LazyLoadEvent): void {

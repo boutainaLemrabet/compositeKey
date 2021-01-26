@@ -98,7 +98,7 @@
     "ngx-webstorage": "6.0.0",
     "primeflex": "^1.0.0",
     "primeicons": "^2.0.0",
-    "primeng": "https://github.com/yelhouti/primeng/releases/download/9.0.6/primeng-9.0.6.tgz",
+    "primeng": "https://github.com/yelhouti/primeng/releases/download/11.1.0/primeng-11.1.0.tgz",
     "rxjs": "6.6.3",
     "swagger-ui-dist": "3.37.0",
     "tslib": "2.0.3",

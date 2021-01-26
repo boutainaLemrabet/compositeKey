@@ -23,6 +23,10 @@
                     <span jhiTranslate="compositekeyApp.employeeSkillCertificate.type">Certificate Type</span>
                     <p-sortIcon field="type"></p-sortIcon>
                 </th>
+                <th pSortableColumn="employee">
+                    <span jhiTranslate="compositekeyApp.employeeSkillCertificate.employee">Employee</span>
+                    <p-sortIcon field="employee"></p-sortIcon>
+                </th>
                 <th pSortableColumn="skill">
                     <span jhiTranslate="compositekeyApp.employeeSkillCertificate.skill">Employee Skill</span>
                     <p-sortIcon field="skill"></p-sortIcon>
@@ -38,16 +42,22 @@
                     <p-calendar [(ngModel)]="dateRange" selectionMode="range" [readonlyInput]="true" [showButtonBar]="true"
                                 (onSelect)="onDateSelect(dateRange, 'date')" (onClearClick)="onDateSelect(dateRange, 'date')"></p-calendar>
                 </th>
-                    <th>
-                        <p-multiSelect [options]="typeOptions!" [ngModel]="employeeSkillCertificateTable.filters['type.id']?.value" optionLabel="name" optionValue="id"
-                                       [lazy]="true" [rows]="10" (onLazyLoad)="onTypeLazyLoadEvent($event)"
-                                       (ngModelChange)="filter($event, 'type.id')"></p-multiSelect>
-                    </th>
-                    <th>
-                        <p-multiSelect [options]="skillOptions!" [ngModel]="employeeSkillCertificateTable.filters['skill.name']?.value" optionLabel="name" optionValue="name"
-                                       [lazy]="true" [rows]="10" (onLazyLoad)="onSkillLazyLoadEvent($event)"
-                                       (ngModelChange)="filter($event, 'skill.name')"></p-multiSelect>
-                    </th>
+                <th>
+                    <p-multiSelect [options]="typeOptions!" [ngModel]="employeeSkillCertificateTable.filters['type.id']?.value" optionLabel="name" optionValue="id"
+                                    [lazy]="true" [rows]="10" (onLazyLoad)="onTypeLazyLoadEvent($event)"
+                                    (ngModelChange)="filter($event, 'type.id')"></p-multiSelect>
+                </th>
+                <th>
+                    <p-multiSelect [options]="employeeOptions!" [ngModel]="employeeSkillCertificateTable.filters['skill.employee.username']?.value"
+                                   optionLabel="fullname" optionValue="username"
+                                   [lazy]="true" [rows]="10" (onLazyLoad)="onEmployeeLazyLoadEvent($event)"
+                                   (ngModelChange)="filter($event, 'skill.employee.username')"></p-multiSelect>
+                </th>
+                <th>
+                    <p-multiSelect [options]="skillOptions!" [ngModel]="employeeSkillCertificateTable.filters['skill.name']?.value" optionLabel="name" optionValue="name"
+                                    [lazy]="true" [rows]="10" (onLazyLoad)="onSkillLazyLoadEvent($event)"
+                                    (ngModelChange)="filter($event, 'skill.name')"></p-multiSelect>
+                </th>
                 <th></th>
             </tr>
         </ng-template>
@@ -61,8 +71,13 @@
                         </div>
                     </td>
                     <td>
+                        <div *ngIf="employeeSkillCertificate.skill.employee">
+                            <a [routerLink]="['/employee',  employeeSkillCertificate!.skill!.employee!.username!, 'view']">{{ employeeSkillCertificate!.skill!.employee!.fullname }} </a>
+                        </div>
+                    </td>
+                    <td>
                         <div *ngIf="employeeSkillCertificate.skill">
-                            <a [routerLink]="['/employee-skill', { name: employeeSkillCertificate!.skill!.name!, employeeUsername: employeeSkillCertificate!.skill!.employee!.username! }, 'view']">{{ employeeSkillCertificate!.skill!.name }} , {{ employeeSkillCertificate!.skill!.employee!.fullname }}</a>
+                            <a [routerLink]="['/employee-skill', { name: employeeSkillCertificate!.skill!.name!, employeeUsername: employeeSkillCertificate!.skill!.employee!.username! }, 'view']">{{ employeeSkillCertificate!.skill!.name }} </a>
                         </div>
                     </td>
                 <td>
